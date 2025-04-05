@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "MouseDrag",
+                    "type": "PassThrough",
+                    "id": "0ca72d7a-7576-41d3-9c23-73770b6e1879",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "MouseDrag",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -492,6 +501,50 @@
                     "action": "MouseHover",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Mouse Drag",
+                    "id": "44a05e8d-1469-4be8-9218-769ce1f2f4eb",
+                    "path": "MouseDrag",
+                    "interactions": "MouseDrag",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseDrag",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Button",
+                    "id": "9c32b6ae-6409-4e7d-8f4d-6f6e4b09734d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MouseDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Axis1",
+                    "id": "5b7a35a6-a561-4a4d-9b32-1cd6cd37fee6",
+                    "path": "<Mouse>/delta/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MouseDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Axis2",
+                    "id": "06b29c5a-6e3a-4055-b485-506efa9d65c0",
+                    "path": "<Mouse>/delta/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MouseDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

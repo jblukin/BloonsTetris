@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MapGenerator : MonoBehaviour
 {
@@ -8,12 +7,10 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int _rows, _cols, _cellSize;
     public int Rows { get { return _rows; } }
     public int Cols { get { return _cols; } }
-
     public int CellSize { get { return _cellSize; } }
 
     private Cell[,] _grid;
-
-    private InputAction _mouseHover;
+    public Cell[,] Grid { get { return _grid; } }
 
     private Cell _currentCell;
 
@@ -21,9 +18,7 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
 
-        _mouseHover = InputSystem.actions.FindAction( "MouseHover" );
 
-        GenerateBasicGrid( _rows, _cols );
 
     }
 
@@ -31,13 +26,11 @@ public class MapGenerator : MonoBehaviour
     void Update()
     {
 
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint( _mouseHover.ReadValue<Vector2>() );
 
-        HighlightCurrentGridCell( mouseWorldPos );
 
     }
 
-    private void HighlightCurrentGridCell( Vector3 mouseWorldPos )
+    public void HighlightCurrentGridCell( Vector3 mouseWorldPos )
     {
 
         int mouseX = (int)Math.Floor( mouseWorldPos.x ) / _cellSize, mouseY = (int)Math.Floor( mouseWorldPos.y ) / _cellSize;
