@@ -370,9 +370,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02926c524efb91c468af32e5ba8fcef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rows: 17
-  _cols: 17
-  _cellSize: 40
+  _rows: 15
+  _cols: 15
+  _cellSize: 45
 --- !u!4 &1947185388
 Transform:
   m_ObjectHideFlags: 0
@@ -400,7 +400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96b0c162ce01fbf46ba8f34844134677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapGenerator: {fileID: 1947185387}
   _tetriminoPrefab: {fileID: 434067948723922659, guid: 07612fb674443864e94b6ee9c192b3eb, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

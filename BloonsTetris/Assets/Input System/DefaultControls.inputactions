@@ -527,7 +527,7 @@
                 {
                     "name": "Axis1",
                     "id": "5b7a35a6-a561-4a4d-9b32-1cd6cd37fee6",
-                    "path": "<Mouse>/delta/x",
+                    "path": "<Mouse>/position/x",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -538,7 +538,7 @@
                 {
                     "name": "Axis2",
                     "id": "06b29c5a-6e3a-4055-b485-506efa9d65c0",
-                    "path": "<Mouse>/delta/y",
+                    "path": "<Mouse>/position/y",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",

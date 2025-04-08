@@ -1,34 +1,18 @@
 using System;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class MapGenerator : MonoBehaviour
 {
 
-    [SerializeField] private int _rows, _cols, _cellSize;
+    [SerializeField]
+    private int _rows, _cols, _cellSize;
     public int Rows { get { return _rows; } }
     public int Cols { get { return _cols; } }
     public int CellSize { get { return _cellSize; } }
 
     private Cell[,] _grid;
     public Cell[,] Grid { get { return _grid; } }
-
-    private Cell _currentCell;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-
-
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
-
-    }
 
     public void HighlightCurrentGridCell( Vector3 mouseWorldPos )
     {
@@ -38,21 +22,21 @@ public class MapGenerator : MonoBehaviour
         if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols )
         {
 
-            if ( _currentCell.IsInitialized() )
-                _currentCell.SetTextMeshColor( Color.white );
+            if ( _grid[ mouseX, mouseY ].IsInitialized() )
+                _grid[ mouseX, mouseY ].SetTextMeshColor( Color.white );
 
-            _currentCell = default;
+            _grid[ mouseX, mouseY ] = default;
 
             return;
 
         }
 
-        if ( _currentCell.IsInitialized() && ( _currentCell.X != mouseX || _currentCell.Y != mouseY ) )
-            _currentCell.SetTextMeshColor( Color.white );
+        if ( _grid[ mouseX, mouseY ].IsInitialized() && ( _grid[ mouseX, mouseY ].X != mouseX || _grid[ mouseX, mouseY ].Y != mouseY ) )
+            _grid[ mouseX, mouseY ].SetTextMeshColor( Color.white );
 
-        _currentCell = _grid[ mouseX, mouseY ];
+        _grid[ mouseX, mouseY ] = _grid[ mouseX, mouseY ];
 
-        _currentCell.SetTextMeshColor( Color.red );
+        _grid[ mouseX, mouseY ].SetTextMeshColor( Color.red );
 
     }
 
@@ -61,13 +45,15 @@ public class MapGenerator : MonoBehaviour
 
         _grid = new Cell[ rows, cols ];
 
+        int count = 0;
+
         for ( int i = 0; i < rows; i++ )
         {
 
             for ( int j = 0; j < cols; j++ )
             {
 
-                _grid[ i, j ] = new Cell( i, j, _cellSize, false, CreateWorldText( $"({i}, {j})", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 160 ) );
+                _grid[ i, j ] = new Cell( i, j, _cellSize, false, CreateWorldText( $"{count++}", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
             }
 
@@ -84,6 +70,44 @@ public class MapGenerator : MonoBehaviour
         {
 
             Debug.DrawLine( new Vector3( i, 0, 10 ) * _cellSize, new Vector3( i, _rows, 10 ) * _cellSize, Color.white, 1000 );
+
+        }
+
+    }
+
+    public bool TryPlaceTetrimino( out Cell newCell )
+    {
+
+        int mouseX = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.x ) / _cellSize,
+            mouseY = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.y ) / _cellSize;
+
+        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols || _grid[ mouseX, mouseY ].Occupied )
+        {
+
+            newCell = default;
+
+            return false;
+
+        }
+
+        newCell = _grid[ mouseX, mouseY ];
+
+        return true;
+
+    }
+
+    [SerializeField]
+    private bool _debugOn = true;
+
+    public void ToggleDebugFeatures()
+    {
+
+        _debugOn = !_debugOn;
+
+        foreach ( Cell c in _grid )
+        {
+
+            c.SetTextMeshColor( _debugOn ? Color.white : Color.clear );
 
         }
 
@@ -139,6 +163,13 @@ public struct Cell
     public void SetToUnOccupied() => Occupied = false;
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
+
+    public readonly Vector3 CellCenterToWorldSpace()
+    {
+
+        return new Vector3( X + 0.5f, Y + 0.5f, 0 ) * Size;
+
+    }
 
     public readonly bool IsInitialized()
     {
