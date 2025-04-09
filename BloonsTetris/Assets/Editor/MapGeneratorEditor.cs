@@ -15,7 +15,7 @@ public class MapGeneratorEditor : Editor
 
         GUILayout.Space(EditorGUIUtility.standardVerticalSpacing);
 
-        if(GUILayout.Button("Toggle Cell Highlighting/Labels"))
+        if(GUILayout.Button("Toggle Cell Labels"))
         {
 
             if(Application.isPlaying) mapGenerator.ToggleDebugFeatures();

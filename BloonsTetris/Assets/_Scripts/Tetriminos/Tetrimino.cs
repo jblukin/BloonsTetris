@@ -1,10 +1,28 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Collider2D))]
+[RequireComponent( typeof( CompositeCollider2D ) )]
 public class Tetrimino : MonoBehaviour, IDraggable
 {
+    public enum DefaultShape
+    {
+
+        Line,
+        Square,
+        T,
+        L,
+        ReverseL,
+        Zigzag,
+        ReverseZigZag
+
+    }
+
+    private float _power, _cooldown, _range;
+    public float Power { get { return _power; } }
+    public float Cooldown { get { return _cooldown; } }
+    public float Range { get { return _range; } }
 
     private Cell _currentCell;
 
@@ -14,31 +32,30 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
     private MapGenerator _mapGenerator;
 
-    private GameManager.DefaultTetriminoShape _shape;
+    private List<Cell> _currentCells;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
-        _currentPosition = transform.position;
-
         _mapGenerator = GameManager.Instance.MapGenerator;
-
-        _currentCell = _mapGenerator.Grid[ (int)Math.Floor( _currentPosition.x / GameManager.Instance.MapGenerator.CellSize ),
-            (int)Math.Floor( _currentPosition.y / GameManager.Instance.MapGenerator.CellSize ) ];
-
-        _mapGenerator.Grid[ _currentCell.X, _currentCell.Y ].SetToOccupied();
 
         _dragging = false;
 
+        _currentPosition = transform.position;
+
+        GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
+        //Start: to be removed
+
+        _currentCell = _mapGenerator.Grid[ (int)Math.Floor( _currentPosition.x / GameManager.Instance.MapGenerator.CellSize ),
+                (int)Math.Floor( _currentPosition.y / GameManager.Instance.MapGenerator.CellSize ) ];
+
+        _mapGenerator.Grid[ _currentCell.X, _currentCell.Y ].SetToOccupied();
+
+        //End: to be removed
+
         SubscribeInputs();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
 
     }
 

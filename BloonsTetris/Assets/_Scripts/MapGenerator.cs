@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -14,29 +15,34 @@ public class MapGenerator : MonoBehaviour
     private Cell[,] _grid;
     public Cell[,] Grid { get { return _grid; } }
 
+    private Cell _currentCell;
+
     public void HighlightCurrentGridCell( Vector3 mouseWorldPos )
     {
+
+        if ( !_debugOn )
+            return;
 
         int mouseX = (int)Math.Floor( mouseWorldPos.x ) / _cellSize, mouseY = (int)Math.Floor( mouseWorldPos.y ) / _cellSize;
 
         if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols )
         {
 
-            if ( _grid[ mouseX, mouseY ].IsInitialized() )
-                _grid[ mouseX, mouseY ].SetTextMeshColor( Color.white );
+            if ( _currentCell.IsInitialized() )
+                _currentCell.SetTextMeshColor( Color.white );
 
-            _grid[ mouseX, mouseY ] = default;
+            _currentCell = default;
 
             return;
 
         }
 
-        if ( _grid[ mouseX, mouseY ].IsInitialized() && ( _grid[ mouseX, mouseY ].X != mouseX || _grid[ mouseX, mouseY ].Y != mouseY ) )
-            _grid[ mouseX, mouseY ].SetTextMeshColor( Color.white );
+        if ( _currentCell.IsInitialized() && ( _currentCell.X != mouseX || _currentCell.Y != mouseY ) )
+            _currentCell.SetTextMeshColor( Color.white );
 
-        _grid[ mouseX, mouseY ] = _grid[ mouseX, mouseY ];
+        _currentCell = _grid[ mouseX, mouseY ];
 
-        _grid[ mouseX, mouseY ].SetTextMeshColor( Color.red );
+        _currentCell.SetTextMeshColor( Color.red );
 
     }
 
@@ -53,7 +59,7 @@ public class MapGenerator : MonoBehaviour
             for ( int j = 0; j < cols; j++ )
             {
 
-                _grid[ i, j ] = new Cell( i, j, _cellSize, false, CreateWorldText( $"{count++}", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
+                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Unoccupied, CreateWorldText( $"{count++}", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
             }
 
@@ -81,7 +87,7 @@ public class MapGenerator : MonoBehaviour
         int mouseX = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.x ) / _cellSize,
             mouseY = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.y ) / _cellSize;
 
-        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols || _grid[ mouseX, mouseY ].Occupied )
+        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols || _currentCell.Status == Cell.CellStatus.Occupied )
         {
 
             newCell = default;
@@ -93,6 +99,15 @@ public class MapGenerator : MonoBehaviour
         newCell = _grid[ mouseX, mouseY ];
 
         return true;
+
+    }
+
+    public bool TryPlaceTetriminoShape( out List<Cell> newCells )
+    {
+
+        newCells = new();
+
+        return false;
 
     }
 
@@ -139,14 +154,23 @@ public class MapGenerator : MonoBehaviour
 public struct Cell
 {
 
-    public Cell( int x, int y, int size, bool occupied = false, TextMesh textMesh = null )
+    public enum CellStatus
+    {
+
+        Unoccupied,
+        Occupied,
+        Path
+
+    }
+
+    public Cell( int x, int y, int size, CellStatus cellStatus = CellStatus.Unoccupied, TextMesh textMesh = null )
     {
 
         X = x;
         Y = y;
         Size = size;
 
-        Occupied = occupied;
+        Status = cellStatus;
 
         _textMesh = textMesh;
 
@@ -158,9 +182,10 @@ public struct Cell
     public int Y { get; private set; }
     public int Size { get; private set; }
 
-    public bool Occupied { get; private set; }
-    public void SetToOccupied() => Occupied = true;
-    public void SetToUnOccupied() => Occupied = false;
+    public CellStatus Status { get; private set; }
+    public void SetToOccupied() => Status = CellStatus.Occupied;
+    public void SetToUnOccupied() => Status = CellStatus.Unoccupied;
+    public void SetToPath() => Status = CellStatus.Path;
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
 
