@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -84,18 +83,34 @@ public class Tetrimino : MonoBehaviour, IDraggable
     public void OnRotate( InputAction.CallbackContext ctx )
     {
 
-        if ( !_dragging )
+        //Debug.Log( $"Rotating - {name}, (ReadValue: {ctx.ReadValue<float>()})" );
+
+        if ( !_dragging || ctx.ReadValue<float>() == 0 )
             return;
 
-        if(ctx.ReadValue<float>() > 0)
+        RotateTetrimino( ctx.ReadValue<float>() > 0 );
+
+    }
+
+    private void RotateTetrimino( bool clockwise )
+    {
+
+        if ( clockwise )
         {
 
-            //AddRotationFunctionHere
+            transform.RotateAround( transform.position, Vector3.back, 90f );
 
-        } else if(ctx.ReadValue<float>() < 0)
+            for ( int i = 0; i < _localCellPositions.Count; i++ )
+                _localCellPositions[ i ] = new( _localCellPositions[ i ].y, -( _localCellPositions[ i ].x ) );
+
+        }
+        else
         {
+            
+            transform.RotateAround( transform.position, Vector3.back, -90f );
 
-            //AddRotationFunctionHere
+            for ( int i = 0; i < _localCellPositions.Count; i++ )
+                _localCellPositions[ i ] = new( -( _localCellPositions[ i ].y ), _localCellPositions[ i ].x );
 
         }
 
