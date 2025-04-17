@@ -19,20 +19,25 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
     }
 
+    private bool _dragging;
+
+    private MapGenerator _mapGenerator;
+
+    private Vector3 _currentPosition;
+
+
     private float _power, _cooldown, _range;
     public float Power { get { return _power; } }
     public float Cooldown { get { return _cooldown; } }
     public float Range { get { return _range; } }
 
-    private Cell _currentCell;
-
-    private Vector3 _currentPosition;
-
-    private bool _dragging;
-
-    private MapGenerator _mapGenerator;
 
     private List<Cell> _currentCells;
+
+    private List<Vector2> _localCellPositions;
+
+    private DefaultShape _baseShape;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,20 +47,30 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
         _dragging = false;
 
-        _currentPosition = transform.position;
-
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
 
-        //Start: to be removed
+        GetComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Polygons;
 
-        _currentCell = _mapGenerator.Grid[ (int)Math.Floor( _currentPosition.x / GameManager.Instance.MapGenerator.CellSize ),
-                (int)Math.Floor( _currentPosition.y / GameManager.Instance.MapGenerator.CellSize ) ];
+        _currentPosition = transform.position;
 
-        _mapGenerator.Grid[ _currentCell.X, _currentCell.Y ].SetToOccupied();
-
-        //End: to be removed
+        _currentCells = new List<Cell>();
 
         SubscribeInputs();
+
+    }
+
+    public void CopyBaseShapeData( DefaultTetrimino shapeData )
+    {
+
+        _localCellPositions = shapeData.localCellPositions;
+
+        _baseShape = shapeData.Shape;
+
+        _power = shapeData.Power;
+
+        _range = shapeData.Range;
+
+        _cooldown = shapeData.Cooldown;
 
     }
 
@@ -66,26 +81,51 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
     }
 
+    public void OnRotate( InputAction.CallbackContext ctx )
+    {
+
+        if ( !_dragging )
+            return;
+
+        if(ctx.ReadValue<float>() > 0)
+        {
+
+            //AddRotationFunctionHere
+
+        } else if(ctx.ReadValue<float>() < 0)
+        {
+
+            //AddRotationFunctionHere
+
+        }
+
+    }
+
     public void OnDragEnd( InputAction.CallbackContext ctx )
     {
 
         if ( !_dragging )
             return;
 
-        if ( GameManager.Instance.MapGenerator.TryPlaceTetrimino( out Cell newCell ) )
+        foreach ( Cell cell in _currentCells )
+            _mapGenerator.Grid[ cell.X, cell.Y ].SetToUnOccupied();
+
+        if ( GameManager.Instance.MapGenerator.TryPlaceTetriminoShape( _localCellPositions, out List<Cell> newCells, out Vector3 newPosition ) )
         {
 
-            _mapGenerator.Grid[ _currentCell.X, _currentCell.Y ].SetToUnOccupied();
+            _currentCells = newCells;
 
-            _currentCell = newCell;
+            foreach ( Cell cell in _currentCells )
+                _mapGenerator.Grid[ cell.X, cell.Y ].SetToOccupied();
 
-            _mapGenerator.Grid[ _currentCell.X, _currentCell.Y ].SetToOccupied();
-
-            _currentPosition = transform.position = _currentCell.CellCenterToWorldSpace();
+            transform.position = _currentPosition = newPosition;
 
         }
         else
         {
+
+            foreach ( Cell cell in _currentCells )
+                _mapGenerator.Grid[ cell.X, cell.Y ].SetToOccupied();
 
             transform.position = _currentPosition;
 
@@ -93,7 +133,7 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
         _dragging = false;
 
-        Debug.Log( $"Ending! - ({name})" );
+        //Debug.Log( $"Ending! - ({name})" );
     }
 
     public void OnDragProccessing( InputAction.CallbackContext ctx )
@@ -104,12 +144,15 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
         transform.position = new( GameManager.Instance.MouseWorldPosition.x, GameManager.Instance.MouseWorldPosition.y, 10 );
 
-        Debug.Log( $"Processing! - ({name})" );
+        //Debug.Log( $"Processing! - ({name})" );
 
     }
 
     public void OnDragStart( InputAction.CallbackContext ctx )
     {
+
+        if ( ctx.canceled )
+            return;
 
         Ray mouseCast = Camera.main.ScreenPointToRay( ctx.ReadValue<Vector2>() );
 
@@ -118,9 +161,10 @@ public class Tetrimino : MonoBehaviour, IDraggable
         if ( hit.collider != null )
         {
 
-            if ( hit.collider.gameObject == gameObject )
+            if ( hit.collider.transform == transform )
             {
-                Debug.Log( $"Starting! - ({name})" );
+
+                //Debug.Log( $"Starting! - ({name})" );
 
                 _dragging = true;
 
@@ -142,6 +186,7 @@ public class Tetrimino : MonoBehaviour, IDraggable
         GameManager.Instance.Actions.MouseDrag.started += OnDragStart;
         GameManager.Instance.Actions.MouseDrag.performed += OnDragProccessing;
         GameManager.Instance.Actions.MouseDrag.canceled += OnDragEnd;
+        GameManager.Instance.Actions.Rotate.performed += OnRotate;
 
     }
 
@@ -151,6 +196,7 @@ public class Tetrimino : MonoBehaviour, IDraggable
         GameManager.Instance.Actions.MouseDrag.started -= OnDragStart;
         GameManager.Instance.Actions.MouseDrag.performed -= OnDragProccessing;
         GameManager.Instance.Actions.MouseDrag.canceled -= OnDragEnd;
+        GameManager.Instance.Actions.Rotate.performed -= OnRotate;
 
     }
 

@@ -7,6 +7,9 @@ public class MapGenerator : MonoBehaviour
 {
 
     [SerializeField]
+    private bool _debugText, _debugHighlight;
+
+    [SerializeField]
     private int _rows, _cols, _cellSize;
     public int Rows { get { return _rows; } }
     public int Cols { get { return _cols; } }
@@ -20,7 +23,7 @@ public class MapGenerator : MonoBehaviour
     public void HighlightCurrentGridCell( Vector3 mouseWorldPos )
     {
 
-        if ( !_debugOn )
+        if ( !_debugHighlight )
             return;
 
         int mouseX = (int)Math.Floor( mouseWorldPos.x ) / _cellSize, mouseY = (int)Math.Floor( mouseWorldPos.y ) / _cellSize;
@@ -61,6 +64,9 @@ public class MapGenerator : MonoBehaviour
 
                 _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Unoccupied, CreateWorldText( $"{count++}", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
+                if ( !_debugText )
+                    _grid[ i, j ].SetTextMeshColor( Color.clear );
+
             }
 
         }
@@ -81,7 +87,8 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    public bool TryPlaceTetrimino( out Cell newCell )
+    [Obsolete]
+    public bool TryPlaceTetriminoSingleCell( out Cell newCell )
     {
 
         int mouseX = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.x ) / _cellSize,
@@ -102,29 +109,56 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    public bool TryPlaceTetriminoShape( out List<Cell> newCells )
+    public bool TryPlaceTetriminoShape( List<Vector2> shapeLocalPositions, out List<Cell> newCells, out Vector3 newPosition )
     {
+
+        int mouseX = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.x ) / _cellSize,
+            mouseY = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.y ) / _cellSize;
+
+        newPosition = default;
 
         newCells = new();
 
-        return false;
+        foreach ( Vector2 tetriminoCell in shapeLocalPositions )
+        {
+
+            int currCellX = mouseX + (int)Math.Floor( tetriminoCell.x ), currCellY = mouseY + (int)Math.Floor( tetriminoCell.y );
+
+            if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _cols ||
+                    _grid[ currCellX, currCellY ].Status != Cell.CellStatus.Unoccupied )
+                return false;
+
+            newCells.Add( _grid[ currCellX, currCellY ] );
+
+        }
+
+        newPosition = _grid[ mouseX, mouseY ].CellCenterToWorldSpace();
+
+        return true;
 
     }
 
-    [SerializeField]
-    private bool _debugOn = true;
-
-    public void ToggleDebugFeatures()
+    public void ToggleDebugText()
     {
 
-        _debugOn = !_debugOn;
+        _debugHighlight = _debugText = !_debugText;
 
         foreach ( Cell c in _grid )
         {
 
-            c.SetTextMeshColor( _debugOn ? Color.white : Color.clear );
+            c.SetTextMeshColor( _debugText ? Color.white : Color.clear );
 
         }
+
+    }
+
+    public void ToggleDebugHighlighting()
+    {
+
+        if ( !_debugText )
+            return;
+
+        _debugHighlight = !_debugHighlight;
 
     }
 
@@ -183,9 +217,9 @@ public struct Cell
     public int Size { get; private set; }
 
     public CellStatus Status { get; private set; }
-    public void SetToOccupied() => Status = CellStatus.Occupied;
-    public void SetToUnOccupied() => Status = CellStatus.Unoccupied;
-    public void SetToPath() => Status = CellStatus.Path;
+    public void SetToOccupied() { Status = CellStatus.Occupied; SetTextMeshColor( Color.clear ); }
+    public void SetToUnOccupied() { Status = CellStatus.Unoccupied; SetTextMeshColor( Color.white ); }
+    public void SetToPath() { Status = CellStatus.Path; SetTextMeshColor( Color.green ); }
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
 

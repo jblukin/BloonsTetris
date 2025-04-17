@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "DefaultTetrimino", menuName = "Scriptable Objects/DefaultTetrimino")]
+[CreateAssetMenu( fileName = "DefaultTetrimino", menuName = "Scriptable Objects/DefaultTetrimino" )]
 public class DefaultTetrimino : ScriptableObject
 {
 

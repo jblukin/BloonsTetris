@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,7 +6,7 @@ using UnityEngine.InputSystem;
 [DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
-    
+
     private static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
 
@@ -20,8 +21,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<DefaultTetrimino> _defaultTetriminos;
     private List<GameObject> _allTetriminos;
 
-
-    private InputAction _mouseHover, _mouseDrag;
     public Inputs Actions { get; private set; }
 
     private void Awake()
@@ -50,11 +49,7 @@ public class GameManager : MonoBehaviour
 
         _allTetriminos = new List<GameObject>();
 
-        _mouseHover = InputSystem.actions.FindAction( "MouseHover" );
-
-        _mouseDrag = InputSystem.actions.FindAction( "MouseDrag" );
-
-        Actions = new( _mouseHover, _mouseDrag );
+        Actions = new( InputSystem.actions.FindAction( "MouseHover" ), InputSystem.actions.FindAction( "MouseDrag" ), InputSystem.actions.FindAction( "Rotate" ) );
 
         _mapGenerator.GenerateBasicGrid( _mapGenerator.Rows, _mapGenerator.Cols );
 
@@ -64,30 +59,36 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        _mouseWorldPosition = Camera.main.ScreenToWorldPoint( _mouseHover.ReadValue<Vector2>() );
+        _mouseWorldPosition = Camera.main.ScreenToWorldPoint( Actions.MouseHover.ReadValue<Vector2>() );
 
         _mapGenerator.HighlightCurrentGridCell( _mouseWorldPosition );
 
         if ( Input.GetKeyDown( KeyCode.Z ) )
-            SpawnTetriminoSingleCell();
+            SpawnTetriminoShape( Tetrimino.DefaultShape.Square );
 
     }
 
-    private void SpawnTetriminoShape(Tetrimino.DefaultShape shape)
+    public void SpawnTetriminoShape( Tetrimino.DefaultShape shape )
     {
 
-        DefaultTetrimino tetriminoToSpawn = _defaultTetriminos.Find( x => x.Shape == shape );
+        DefaultTetrimino baseShapeData = _defaultTetriminos.Find( x => x.Shape == shape );
 
-        GameObject parentObj = Instantiate(new GameObject($"{shape}"), new Vector3(5f, 40f, 1f) * _mapGenerator.CellSize, default, null);
+        GameObject parentObj = new( $"{shape}" );
+
+        Tetrimino tetrimino = parentObj.AddComponent<Tetrimino>();
+
+        tetrimino.CopyBaseShapeData( baseShapeData );
+
+        parentObj.tag = "Tetrimino";
+
+        parentObj.transform.position = new Vector3( -50f, 100f, 1f );
 
         parentObj.transform.localScale *= _mapGenerator.CellSize;
 
-        parentObj.AddComponent<Tetrimino>();
-
-        foreach( Vector2 localPos in tetriminoToSpawn.localCellPositions )
+        foreach ( Vector2 localPos in baseShapeData.localCellPositions )
         {
 
-            GameObject currCell = Instantiate(_tetriminoBasePrefab, parentObj.transform, false);
+            GameObject currCell = Instantiate( _tetriminoBasePrefab, parentObj.transform, false );
 
             currCell.transform.localPosition = localPos;
 
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    [Obsolete]
     private void SpawnTetriminoSingleCell()
     {
 
@@ -136,12 +138,14 @@ public struct Inputs
 
     public InputAction MouseHover { get; private set; }
     public InputAction MouseDrag { get; private set; }
+    public InputAction Rotate { get; private set; }
 
-    public Inputs( InputAction hover, InputAction drag )
+    public Inputs( InputAction hover, InputAction drag, InputAction rotate )
     {
 
         MouseHover = hover;
         MouseDrag = drag;
+        Rotate = rotate;
 
     }
 

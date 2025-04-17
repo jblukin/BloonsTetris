@@ -370,10 +370,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02926c524efb91c468af32e5ba8fcef8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugText: 1
+  _debugHighlight: 0
   _rows: 15
   _cols: 15
   _cellSize: 45
-  _debugOn: 1
 --- !u!4 &1947185388
 Transform:
   m_ObjectHideFlags: 0
