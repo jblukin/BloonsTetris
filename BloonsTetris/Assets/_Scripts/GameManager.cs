@@ -63,9 +63,6 @@ public class GameManager : MonoBehaviour
 
         _mapGenerator.HighlightCurrentGridCell( _mouseWorldPosition );
 
-        if ( Input.GetKeyDown( KeyCode.Z ) )
-            SpawnTetriminoShape( Tetrimino.DefaultShape.Square );
-
     }
 
     public void SpawnTetriminoShape( Tetrimino.DefaultShape shape )
@@ -95,39 +92,6 @@ public class GameManager : MonoBehaviour
         }
 
         _allTetriminos.Add( parentObj );
-
-    }
-
-    [Obsolete]
-    private void SpawnTetriminoSingleCell()
-    {
-
-        for ( int i = 0; i < MapGenerator.Rows; i++ )
-        {
-
-            for ( int j = 0; j < MapGenerator.Cols; j++ )
-            {
-
-                if ( MapGenerator.Grid[ i, j ].Status == Cell.CellStatus.Unoccupied )
-                {
-
-                    GameObject tetrimino = Instantiate( _tetriminoBasePrefab, new Vector3( i + 0.5f, j + 0.5f, 0 ) * MapGenerator.CellSize, default, null );
-
-                    tetrimino.tag = "Tetrimino";
-
-                    tetrimino.name = $"Tetrimino{_allTetriminos.Count}";
-
-                    tetrimino.transform.localScale *= MapGenerator.CellSize;
-
-                    _allTetriminos.Add( tetrimino );
-
-                    return;
-
-                }
-
-            }
-
-        }
 
     }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[DisallowMultipleComponent]
 [RequireComponent( typeof( CompositeCollider2D ) )]
 public class Tetrimino : MonoBehaviour, IDraggable
 {
@@ -85,7 +86,7 @@ public class Tetrimino : MonoBehaviour, IDraggable
 
         //Debug.Log( $"Rotating - {name}, (ReadValue: {ctx.ReadValue<float>()})" );
 
-        if ( !_dragging || ctx.ReadValue<float>() == 0 )
+        if ( !_dragging || _baseShape is DefaultShape.Square || ctx.ReadValue<float>() == 0 )
             return;
 
         RotateTetrimino( ctx.ReadValue<float>() > 0 );
@@ -106,7 +107,7 @@ public class Tetrimino : MonoBehaviour, IDraggable
         }
         else
         {
-            
+
             transform.RotateAround( transform.position, Vector3.back, -90f );
 
             for ( int i = 0; i < _localCellPositions.Count; i++ )

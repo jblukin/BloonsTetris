@@ -62,7 +62,7 @@ public class MapGenerator : MonoBehaviour
             for ( int j = 0; j < cols; j++ )
             {
 
-                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Unoccupied, CreateWorldText( $"{count++}", null, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
+                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Unoccupied, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
                 if ( !_debugText )
                     _grid[ i, j ].SetTextMeshColor( Color.clear );
