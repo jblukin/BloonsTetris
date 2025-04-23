@@ -87,28 +87,6 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    [Obsolete]
-    public bool TryPlaceTetriminoSingleCell( out Cell newCell )
-    {
-
-        int mouseX = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.x ) / _cellSize,
-            mouseY = (int)Math.Floor( GameManager.Instance.MouseWorldPosition.y ) / _cellSize;
-
-        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols || _currentCell.Status == Cell.CellStatus.Occupied )
-        {
-
-            newCell = default;
-
-            return false;
-
-        }
-
-        newCell = _grid[ mouseX, mouseY ];
-
-        return true;
-
-    }
-
     public bool TryPlaceTetriminoShape( List<Vector2> shapeLocalPositions, out List<Cell> newCells, out Vector3 newPosition )
     {
 
@@ -185,6 +163,7 @@ public class MapGenerator : MonoBehaviour
 
 }
 
+[Serializable]
 public struct Cell
 {
 
@@ -210,7 +189,7 @@ public struct Cell
 
     }
 
-    private TextMesh _textMesh;
+    private readonly TextMesh _textMesh;
 
     public int X { get; private set; }
     public int Y { get; private set; }
