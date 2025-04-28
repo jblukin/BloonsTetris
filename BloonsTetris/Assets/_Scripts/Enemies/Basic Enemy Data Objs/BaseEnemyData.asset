@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d24f1537ebc31a1448107c6c6d976655, type: 3}
-  m_Name: L
+  m_Script: {fileID: 11500000, guid: 528fa603d241fca4da717b4721c2314d, type: 3}
+  m_Name: BaseEnemyData
   m_EditorClassIdentifier: 
-  Power: 10
-  Cooldown: 10
+  MaxHP: 100
+  Speed: 10
   Range: 10
-  Shape: 3
-  localCellPositions:
-  - {x: 0, y: 0}
-  - {x: 0, y: 1}
-  - {x: 0, y: -1}
-  - {x: 1, y: -1}
+  ElementalTypes: 0
+  ElementalResistances: 0
+  BaseStatusEffects: 0

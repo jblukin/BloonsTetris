@@ -7,7 +7,9 @@ public class DefaultTetrimino : ScriptableObject
 
     public float Power, Cooldown, Range;
 
-    public Tetrimino.DefaultShape Shape;
+    public DefaultShape Shape;
+
+    public ElementalTypes ElementalTypes;
 
     public List<Vector2> localCellPositions;
 

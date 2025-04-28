@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class MapGenerator : MonoBehaviour
+public class GridManager : MonoBehaviour
 {
 
     [SerializeField]
@@ -18,6 +18,8 @@ public class MapGenerator : MonoBehaviour
     private Cell[,] _grid;
     public Cell[,] Grid { get { return _grid; } }
 
+    #region Debug
+#if UNITY_EDITOR
     private Cell _currentCell;
 
     public void HighlightCurrentGridCell( Vector3 mouseWorldPos )
@@ -48,6 +50,8 @@ public class MapGenerator : MonoBehaviour
         _currentCell.SetTextMeshColor( Color.red );
 
     }
+#endif
+    #endregion
 
     public void GenerateBasicGrid( int rows, int cols )
     {
@@ -62,7 +66,7 @@ public class MapGenerator : MonoBehaviour
             for ( int j = 0; j < cols; j++ )
             {
 
-                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Unoccupied, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
+                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Empty, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
                 if ( !_debugText )
                     _grid[ i, j ].SetTextMeshColor( Color.clear );
@@ -103,7 +107,7 @@ public class MapGenerator : MonoBehaviour
             int currCellX = mouseX + (int)Math.Floor( tetriminoCell.x ), currCellY = mouseY + (int)Math.Floor( tetriminoCell.y );
 
             if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _cols ||
-                    _grid[ currCellX, currCellY ].Status != Cell.CellStatus.Unoccupied )
+                    _grid[ currCellX, currCellY ].Status != Cell.CellStatus.Empty )
                 return false;
 
             newCells.Add( _grid[ currCellX, currCellY ] );
@@ -170,13 +174,13 @@ public struct Cell
     public enum CellStatus
     {
 
-        Unoccupied,
+        Empty,
         Occupied,
         Path
 
     }
 
-    public Cell( int x, int y, int size, CellStatus cellStatus = CellStatus.Unoccupied, TextMesh textMesh = null )
+    public Cell( int x, int y, int size, CellStatus cellStatus = CellStatus.Empty, TextMesh textMesh = null )
     {
 
         X = x;
@@ -196,16 +200,16 @@ public struct Cell
     public int Size { get; private set; }
 
     public CellStatus Status { get; private set; }
-    public void SetToOccupied() { Status = CellStatus.Occupied; SetTextMeshColor( Color.clear ); }
-    public void SetToUnOccupied() { Status = CellStatus.Unoccupied; SetTextMeshColor( Color.white ); }
-    public void SetToPath() { Status = CellStatus.Path; SetTextMeshColor( Color.green ); }
+    public void SetToOccupied() { Status = CellStatus.Occupied; /*SetTextMeshColor( Color.clear );*/ }
+    public void SetToEmpty() { Status = CellStatus.Empty; /*SetTextMeshColor( Color.white );*/ }
+    public void SetToPath() { Status = CellStatus.Path; /*SetTextMeshColor( Color.green );*/ }
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
 
     public readonly Vector3 CellCenterToWorldSpace()
     {
 
-        return new Vector3( X + 0.5f, Y + 0.5f, 0 ) * Size;
+        return new Vector3( X + 0.5f, Y + 0.5f, 1 / Size ) * Size;
 
     }
 

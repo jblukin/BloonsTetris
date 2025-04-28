@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dc87b4534c156c44a65f03f11be54a8, type: 3}
-  m_Name: TestPopupPrompt
+  m_Name: Newer GridData
   m_EditorClassIdentifier: 
-  Rows: 0
-  Columns: 0
-  CellSize: 0
+  _rows: 20
+  _columns: 20
+  _cellSize: 45

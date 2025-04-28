@@ -10,8 +10,11 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
 
-    private MapGenerator _mapGenerator;
-    public MapGenerator MapGenerator { get { return _mapGenerator; } }
+    private GridManager _gridManager;
+    public GridManager GridManager { get { return _gridManager; } }
+
+    private EnemyManager _enemyManager;
+    public EnemyManager EnemyManager { get { return _enemyManager; } }
 
     private Vector3 _mouseWorldPosition;
     public Vector3 MouseWorldPosition { get { return _mouseWorldPosition; } }
@@ -37,7 +40,9 @@ public class GameManager : MonoBehaviour
 
             _instance = this;
 
-            _mapGenerator = GetComponent<MapGenerator>();
+            _gridManager = GetComponent<GridManager>();
+
+            _enemyManager = GetComponent<EnemyManager>();
 
         }
 
@@ -51,7 +56,7 @@ public class GameManager : MonoBehaviour
 
         Actions = new( InputSystem.actions.FindAction( "MouseHover" ), InputSystem.actions.FindAction( "MouseDrag" ), InputSystem.actions.FindAction( "Rotate" ) );
 
-        _mapGenerator.GenerateBasicGrid( _mapGenerator.Rows, _mapGenerator.Cols );
+        _gridManager.GenerateBasicGrid( _gridManager.Rows, _gridManager.Cols );
 
     }
 
@@ -61,26 +66,22 @@ public class GameManager : MonoBehaviour
 
         _mouseWorldPosition = Camera.main.ScreenToWorldPoint( Actions.MouseHover.ReadValue<Vector2>() );
 
-        _mapGenerator.HighlightCurrentGridCell( _mouseWorldPosition );
+        _gridManager.HighlightCurrentGridCell( _mouseWorldPosition );
 
     }
 
-    public void SpawnTetriminoShape( Tetrimino.DefaultShape shape )
+    public void SpawnTetriminoShape( DefaultShape shape )
     {
 
-        DefaultTetrimino baseShapeData = _defaultTetriminos.Find( x => x.Shape == shape );
+        DefaultTetrimino baseShapeData = Instantiate(_defaultTetriminos.Find( x => x.Shape == shape ));
 
         GameObject parentObj = new( $"{shape}" );
 
         Tetrimino tetrimino = parentObj.AddComponent<Tetrimino>();
 
-        tetrimino.CopyBaseShapeData( baseShapeData );
-
-        parentObj.tag = "Tetrimino";
-
         parentObj.transform.position = new Vector3( -50f, 100f, 1f );
 
-        parentObj.transform.localScale *= _mapGenerator.CellSize;
+        parentObj.transform.localScale *= _gridManager.CellSize;
 
         foreach ( Vector2 localPos in baseShapeData.localCellPositions )
         {
@@ -90,6 +91,8 @@ public class GameManager : MonoBehaviour
             currCell.transform.localPosition = localPos;
 
         }
+
+        tetrimino.Init( baseShapeData );
 
         _allTetriminos.Add( parentObj );
 
@@ -114,3 +117,47 @@ public struct Inputs
     }
 
 }
+
+public enum DefaultShape
+{
+
+    Line,
+    Square,
+    T,
+    L,
+    ReverseL,
+    Zigzag,
+    ReverseZigZag
+
+}
+
+[Flags]
+public enum ElementalTypes
+{
+    None = 0,
+    Physical = 1,
+    Ice = 2,
+    Poison = 4,
+    Lightning = 8,
+    Fire = 16
+
+}
+
+[Flags]
+public enum ElementalResistances
+{
+
+    None = 0,
+    PhysicalLow = 1,
+    PhysicalMedium = 2,
+    PhysicalHigh = 4,
+    PoisonLow = 8,
+    PoisonMedium = 16,
+    PoisonHigh = 32,
+    FireLow = 64,
+    FireMedium = 128,
+    FireHigh = 256
+
+}
+
+

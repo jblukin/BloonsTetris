@@ -1,15 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor( typeof( MapGenerator ), true )]
-[CanEditMultipleObjects]
-public class MapGeneratorEditor : Editor
+[CustomEditor( typeof( GridManager ), true ), CanEditMultipleObjects]
+public class GridManagerEditor : Editor
 {
 
     public override void OnInspectorGUI()
     {
 
-        MapGenerator mapGenerator = (MapGenerator)target;
+        GridManager mapGenerator = (GridManager)target;
 
         base.OnInspectorGUI();
 
@@ -43,7 +42,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.Square );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.Square );
 
         }
 
@@ -53,7 +52,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.L );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.L );
 
         }
 
@@ -63,7 +62,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.ReverseL );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.ReverseL );
 
         }
 
@@ -73,7 +72,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.Zigzag );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.Zigzag );
 
         }
 
@@ -83,7 +82,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.ReverseZigZag );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.ReverseZigZag );
 
         }
 
@@ -93,7 +92,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.Line );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.Line );
 
         }
 
@@ -103,7 +102,7 @@ public class MapGeneratorEditor : Editor
         {
 
             if ( Application.isPlaying )
-                GameManager.Instance.SpawnTetriminoShape( Tetrimino.DefaultShape.T );
+                GameManager.Instance.SpawnTetriminoShape( DefaultShape.T );
 
         }
 
