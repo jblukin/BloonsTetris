@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -251,8 +250,6 @@ public class Tetrimino : MonoBehaviour
     public void OnTriggerEnter2D( Collider2D collidingObject )
     {
 
-        Debug.Log( collidingObject.name );
-
         if ( collidingObject.GetComponent<Enemy>() != null )
             _enemiesInRange.Add( collidingObject.gameObject );
 
@@ -297,6 +294,30 @@ public class Tetrimino : MonoBehaviour
             yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
             //Perform Ability Here
+
+            #region Brief Partial Example
+            /*//Find Farthest Enemy Along Path
+
+            //Fire/Spawn Projectile (Needs to be gameObject with CircleCollider2D)
+            //Projectile Script Needed with OnTriggerEnter2D Message that calls ReceiveAbility Func of collidingObject (which will be an enemy)
+
+            GameObject farthestEnemy = null;
+
+            float distanceToFarthest = 0;
+
+            foreach(var enemy in _enemiesInRange)
+            {
+
+                //enemy.RecieveAbility( _power, _elementalTypes );
+
+            }
+
+            //var projectile = Instantiate( _projectilePrefab );
+            //var projectileScript = projectile.GetComponent<Projectile>();
+            //projectileScript.Init( target = farthestEnemy, speed, baseDamage, etc... );
+            //projectileScript.Fire();*/
+            #endregion
+
             Debug.Log( "L Used" );
 
             yield return new WaitForSeconds( _cooldown );
@@ -308,72 +329,102 @@ public class Tetrimino : MonoBehaviour
     private IEnumerator Use_ReverseL_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "Reverse L Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "Reverse L Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
 
     private IEnumerator Use_T_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "T Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "T Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
 
     private IEnumerator Use_Line_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "Line Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "Line Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
 
     private IEnumerator Use_Zigzag_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "Zigzag Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "Zigzag Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
 
     private IEnumerator Use_ReverseZigzag_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "Reverse Zigzag Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "Reverse Zigzag Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
 
     private IEnumerator Use_Square_Ability()
     {
 
-        yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+        while ( true )
+        {
 
-        //Perform Ability Here
-        Debug.Log( "Square Used" );
+            yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
-        yield return new WaitForSeconds( _cooldown );
+            //Perform Ability Here
+            Debug.Log( "Square Used" );
+
+            yield return new WaitForSeconds( _cooldown );
+
+        }
 
     }
     #endregion

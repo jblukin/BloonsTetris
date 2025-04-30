@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f1537ebc31a1448107c6c6d976655, type: 3}
   m_Name: L
   m_EditorClassIdentifier: 
-  Power: 10
-  Cooldown: 10
-  Range: 10
+  Power: 100
+  Cooldown: 4
+  Range: 20
   Shape: 3
-  ElementalTypes: 0
+  ElementalTypes: 1
   localCellPositions:
   - {x: 0, y: -0}
   - {x: 0, y: 1}

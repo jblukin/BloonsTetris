@@ -373,9 +373,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugText: 0
   _debugHighlight: 0
-  _rows: 20
-  _cols: 20
-  _cellSize: 30
+  _rows: 24
+  _cols: 24
+  _cellSize: 25
 --- !u!4 &1947185388
 Transform:
   m_ObjectHideFlags: 0

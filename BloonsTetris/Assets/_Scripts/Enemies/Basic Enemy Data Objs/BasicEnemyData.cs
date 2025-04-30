@@ -4,7 +4,7 @@ using UnityEngine;
 public class BasicEnemyData : ScriptableObject
 {
 
-    public float MaxHP, Speed, Range;
+    public float MaxHP, Power, Speed, Range;
 
     public ElementalTypes ElementalTypes;
 

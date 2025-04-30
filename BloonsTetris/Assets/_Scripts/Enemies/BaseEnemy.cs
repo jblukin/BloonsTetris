@@ -5,7 +5,7 @@ public class BaseEnemy : Enemy
 {
 
     private float _maxHP, _currentHP;
-    private float _speed, _range;
+    private float _power, _speed, _range, _cooldown;
     private float _doTValue;
     private ElementalTypes _elementalTypes;
     private ElementalResistances _elementalResistances;
@@ -72,6 +72,7 @@ public class BaseEnemy : Enemy
             }
 
         }
+
         if ( elementalTypes != ElementalTypes.None )
             ProcessElementalEffects( elementalTypes );
 
@@ -81,7 +82,7 @@ public class BaseEnemy : Enemy
     {
         //Set to follow path from Grid Data in use
 
-        transform.position += _speed * Time.deltaTime * Vector3.left; 
+        transform.position += _speed * Time.deltaTime * Vector3.left;
 
     }
 
@@ -176,7 +177,7 @@ public class BaseEnemy : Enemy
     {
 
         Debug.Log( $"Enemy of type: {GetType()} used ability" );
-        yield return null;
+        yield return new WaitForSeconds( _cooldown );
 
     }
 
