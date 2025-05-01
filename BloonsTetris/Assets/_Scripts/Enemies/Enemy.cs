@@ -1,5 +1,6 @@
-using System;
+using System.Collections.Generic;
 using System.Collections;
+using System;
 using UnityEngine;
 
 [RequireComponent( typeof( CircleCollider2D ) )]
@@ -24,7 +25,12 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    public abstract StatusEffects Statuses { get; protected set; }
+    protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue;
+    protected ElementalTypes _elementalTypes;
+    protected ElementalResistances _elementalResistances;
+    protected StatusEffects _statusEffects;
+    protected Coroutine _poisonDoTAction, _fireDoTAction, _abilityAction;
+    protected List<GameObject> _receivingObjects;
 
     public abstract void Init( BasicEnemyData enemyData );
 
@@ -32,16 +38,18 @@ public abstract class Enemy : MonoBehaviour
 
     protected abstract void Move();
 
-    protected abstract float CalculateFinalReceivedDamage( float damageReceived );
+    protected abstract float CalculateFinalReceivedDamage( float damageReceived, ElementalTypes elementalTypes = 0 );
 
-    protected abstract float CalculateFinalReceivedHealth( float healthReceived );
+    protected abstract float CalculateFinalReceivedHealth( float healthReceived, ElementalTypes elementalTypes = 0 );
 
-    protected abstract void ProcessElementalEffects( ElementalTypes elementalTypes );
+    protected abstract void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0 );
 
-    protected abstract IEnumerator ProcessDamageOverTime( float tickSpeed, bool isFire = false );
+    protected abstract IEnumerator ProcessDamageOverTime( float tickRate, bool isFire );
 
     protected abstract IEnumerator UseAbility();
 
     protected abstract void OnDeath( bool deathByFire = false );
+
+    protected abstract void Explode();
 
 }

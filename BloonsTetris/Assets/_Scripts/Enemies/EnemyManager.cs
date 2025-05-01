@@ -7,6 +7,8 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField]
     private List<BasicEnemyData> _basicEnemyDataObjs;
+    [SerializeField]
+    private Sprite _enemySprite;
 
     public void SpawnEnemy()
     {
@@ -20,7 +22,7 @@ public class EnemyManager : MonoBehaviour
 
         SpriteRenderer r = gameObject.AddComponent<SpriteRenderer>();
 
-        r.sprite = default;
+        r.sprite = _enemySprite;
 
         gameObject.transform.localScale *= GameManager.Instance.GridManager.CellSize;
 

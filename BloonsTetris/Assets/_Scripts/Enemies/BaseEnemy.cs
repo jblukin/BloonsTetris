@@ -4,18 +4,7 @@ using UnityEngine;
 public class BaseEnemy : Enemy
 {
 
-    private float _maxHP, _currentHP;
-    private float _power, _speed, _range, _cooldown;
-    private float _doTValue;
-    private ElementalTypes _elementalTypes;
-    private ElementalResistances _elementalResistances;
-    private StatusEffects _statusEffects;
-
-    private Coroutine _damageOverTime;
-
-    public override StatusEffects Statuses { get { return _statusEffects; } protected set { _statusEffects = value; } }
-
-    bool onInit = false;
+    private bool onInit = false;
 
     // Update is called once per frame
     void Update()
@@ -43,12 +32,21 @@ public class BaseEnemy : Enemy
         onInit = true;
 
         _maxHP = _currentHP = enemyData.MaxHP;
+        _power = enemyData.Power;
         _speed = enemyData.Speed;
         _range = enemyData.Range;
         _elementalTypes = enemyData.ElementalTypes;
         _elementalResistances = enemyData.ElementalResistances;
         _statusEffects = enemyData.BaseStatusEffects;
-        _doTValue = 0;
+        _deathExplosionPower = enemyData.DeathExplosionPower;
+        _deathExplosionRadius = enemyData.DeathExplosionRadius;
+
+        _poisonDoTValue = _fireDoTValue = 0;
+
+        if ( enemyData.HasAbility )
+            _abilityAction = StartCoroutine( UseAbility() );
+
+        gameObject.layer = LayerMask.NameToLayer( "Enemy" );
 
     }
 
@@ -60,20 +58,25 @@ public class BaseEnemy : Enemy
 
             if ( isHealing )
                 _currentHP += CalculateFinalReceivedHealth( amountReceived );
+
             else
             {
+
                 _currentHP -= CalculateFinalReceivedDamage( amountReceived );
 
                 if ( _currentHP <= 0 )
                 {
+
                     OnDeath( _statusEffects.HasFlag( StatusEffects.Burn ) );
                     return;
+
                 }
+
             }
 
         }
 
-        if ( elementalTypes != ElementalTypes.None )
+        if ( elementalTypes is not 0 )
             ProcessElementalEffects( elementalTypes );
 
     }
@@ -86,14 +89,41 @@ public class BaseEnemy : Enemy
 
     }
 
-    protected override float CalculateFinalReceivedDamage( float damageReceived )
+    protected override float CalculateFinalReceivedDamage( float damageReceived, ElementalTypes elementalTypes = 0 )
     {
 
-        return damageReceived;
+        if ( _elementalResistances is 0 ||
+            ( !elementalTypes.HasFlag( ElementalTypes.Fire ) &&
+            !elementalTypes.HasFlag( ElementalTypes.Poison ) &&
+            !elementalTypes.HasFlag( ElementalTypes.Physical ) ) )
+            return damageReceived;
+
+        else
+        {
+
+            if ( ( elementalTypes.HasFlag( ElementalTypes.Fire ) && _elementalResistances.HasFlag( ElementalResistances.FireHigh ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Poison ) && _elementalResistances.HasFlag( ElementalResistances.PoisonHigh ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Physical ) && _elementalResistances.HasFlag( ElementalResistances.PhysicalHigh ) ) )
+                damageReceived *= 0.1f;
+
+            else if ( ( elementalTypes.HasFlag( ElementalTypes.Fire ) && _elementalResistances.HasFlag( ElementalResistances.FireMedium ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Poison ) && _elementalResistances.HasFlag( ElementalResistances.PoisonMedium ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Physical ) && _elementalResistances.HasFlag( ElementalResistances.PhysicalMedium ) ) )
+                damageReceived *= 0.4f;
+
+            else if ( ( elementalTypes.HasFlag( ElementalTypes.Fire ) && _elementalResistances.HasFlag( ElementalResistances.FireLow ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Poison ) && _elementalResistances.HasFlag( ElementalResistances.PoisonLow ) ) ||
+                ( elementalTypes.HasFlag( ElementalTypes.Physical ) && _elementalResistances.HasFlag( ElementalResistances.PhysicalLow ) ) )
+                damageReceived *= 0.7f;
+
+
+            return damageReceived;
+
+        }
 
     }
 
-    protected override float CalculateFinalReceivedHealth( float healthReceived )
+    protected override float CalculateFinalReceivedHealth( float healthReceived, ElementalTypes elementalTypes = 0 )
     {
 
         return healthReceived;
@@ -105,57 +135,95 @@ public class BaseEnemy : Enemy
 
         StopAllCoroutines();
 
+        if ( deathByFire )
+            Explode();
+
         //Until Object Pooling
         Destroy( gameObject );
 
     }
 
-    protected override IEnumerator ProcessDamageOverTime( float tickSpeed, bool isFire = false )
+    protected override IEnumerator ProcessDamageOverTime( float tickRate, bool isFire )
     {
 
-        while ( _doTValue > 0 )
+        if ( isFire )
         {
 
-            _currentHP -= _doTValue;
-
-            _doTValue--;
-
-            if ( _currentHP <= 0 )
+            while ( true )
             {
-                OnDeath( isFire );
-                yield break;
+
+                yield return new WaitUntil( () => _fireDoTValue > 0 );
+
+                _currentHP -= _fireDoTValue;
+
+                _fireDoTValue--;
+
+                if ( _currentHP <= 0 )
+                {
+
+                    OnDeath( true );
+                    yield break;
+
+                }
+
+                yield return new WaitForSeconds( tickRate );
+
             }
 
-            yield return new WaitForSeconds( tickSpeed );
+        }
+        else
+        {
+
+            while ( true )
+            {
+
+                yield return new WaitUntil( () => _poisonDoTValue > 0 );
+
+                _currentHP -= _poisonDoTValue;
+
+                _poisonDoTValue--;
+
+                if ( _currentHP <= 0 )
+                {
+
+                    OnDeath();
+                    yield break;
+
+                }
+
+                yield return new WaitForSeconds( tickRate );
+
+            }
 
         }
 
     }
 
-    protected override void ProcessElementalEffects( ElementalTypes elementalTypes )
+    protected override void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0 )
     {
 
-        if ( elementalTypes.HasFlag( ElementalTypes.Fire | ElementalTypes.Poison ) )
+        if ( elementalTypes.HasFlag( ElementalTypes.Fire ) )
         {
 
-            if ( _damageOverTime != null )
-            {
+            _fireDoTValue += doTValueIncrement;
 
-                _doTValue += 5f;
+            _fireDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, true ) );
 
-            }
-            else
-            {
-
-                bool isFire = elementalTypes.HasFlag( ElementalTypes.Fire );
-
-                _damageOverTime = StartCoroutine( ProcessDamageOverTime( 5f, isFire ) );
-
-                _statusEffects |= ( isFire ? StatusEffects.Burn : StatusEffects.Poisoned );
-
-            }
+            _statusEffects |= StatusEffects.Burn;
 
         }
+
+        if ( elementalTypes.HasFlag( ElementalTypes.Poison ) )
+        {
+
+            _poisonDoTValue += doTValueIncrement;
+
+            _poisonDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, false ) );
+
+            _statusEffects |= StatusEffects.Poisoned;
+
+        }
+
 
         if ( elementalTypes.HasFlag( ElementalTypes.Lightning ) )
         {
@@ -176,9 +244,35 @@ public class BaseEnemy : Enemy
     protected override IEnumerator UseAbility()
     {
 
-        Debug.Log( $"Enemy of type: {GetType()} used ability" );
-        yield return new WaitForSeconds( _cooldown );
+        while ( true )
+        {
+
+            //Uncomment if ability has a range
+            //yield return new WaitUntil(() => _receivingObjects.Count > 0);
+
+            Debug.Log( $"Enemy of type: {GetType()} used ability" );
+            yield return new WaitForSeconds( _abilityCooldown );
+
+        }
 
     }
 
+    protected override void Explode()
+    {
+
+        Collider2D[] results = Physics2D.OverlapCircleAll( transform.position, _deathExplosionRadius, LayerMask.GetMask( "Enemy" ) );
+
+        foreach ( var collider in results )
+        {
+
+            if ( collider.TryGetComponent<Enemy>( out var enemy ) )
+            {
+
+                enemy.ReceiveAbility( _deathExplosionPower, ElementalTypes.Fire );
+
+            }
+
+        }
+
+    }
 }
