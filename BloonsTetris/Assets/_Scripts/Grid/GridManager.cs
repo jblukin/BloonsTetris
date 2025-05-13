@@ -10,10 +10,14 @@ public class GridManager : MonoBehaviour
     private bool _debugText, _debugHighlight;
 
     [SerializeField]
-    private int _rows, _cols, _cellSize;
+    private int _rows, _columns, _cellSize;
     public int Rows { get { return _rows; } }
-    public int Cols { get { return _cols; } }
+    public int Columns { get { return _columns; } }
     public int CellSize { get { return _cellSize; } }
+
+
+    private Cell[] _editorGrid;
+
 
     private Cell[,] _grid;
     public Cell[,] Grid { get { return _grid; } }
@@ -30,7 +34,7 @@ public class GridManager : MonoBehaviour
 
         int mouseX = (int)Math.Floor( mouseWorldPos.x ) / _cellSize, mouseY = (int)Math.Floor( mouseWorldPos.y ) / _cellSize;
 
-        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _cols )
+        if ( mouseX < 0 || mouseX >= _rows || mouseY < 0 || mouseY >= _columns )
         {
 
             if ( _currentCell.IsInitialized() )
@@ -52,6 +56,13 @@ public class GridManager : MonoBehaviour
     }
 #endif
     #endregion
+
+    public Cell GetGridCell( int x, int y )
+    {
+
+        return _editorGrid[ x + y * _columns ];
+
+    }
 
     public void GenerateBasicGrid( int rows, int cols )
     {
@@ -78,11 +89,11 @@ public class GridManager : MonoBehaviour
         for ( int i = 0; i <= _rows; i++ )
         {
 
-            Debug.DrawLine( new Vector3( 0, i, 10 ) * _cellSize, new Vector3( _cols, i, 10 ) * _cellSize, Color.white, 1000 );
+            Debug.DrawLine( new Vector3( 0, i, 10 ) * _cellSize, new Vector3( _columns, i, 10 ) * _cellSize, Color.white, 1000 );
 
         }
 
-        for ( int i = 0; i <= _cols; i++ )
+        for ( int i = 0; i <= _columns; i++ )
         {
 
             Debug.DrawLine( new Vector3( i, 0, 10 ) * _cellSize, new Vector3( i, _rows, 10 ) * _cellSize, Color.white, 1000 );
@@ -106,7 +117,7 @@ public class GridManager : MonoBehaviour
 
             int currCellX = mouseX + (int)Math.Floor( tetriminoCell.x ), currCellY = mouseY + (int)Math.Floor( tetriminoCell.y );
 
-            if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _cols ||
+            if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _columns ||
                     _grid[ currCellX, currCellY ].Status != Cell.CellStatus.Empty )
                 return false;
 
@@ -183,11 +194,11 @@ public struct Cell
     public Cell( int x, int y, int size, CellStatus cellStatus = CellStatus.Empty, TextMesh textMesh = null )
     {
 
-        X = x;
-        Y = y;
-        Size = size;
+        _x = x;
+        _y = y;
+        _size = size;
 
-        Status = cellStatus;
+        _cellStatus = cellStatus;
 
         _textMesh = textMesh;
 
@@ -195,21 +206,27 @@ public struct Cell
 
     private readonly TextMesh _textMesh;
 
-    public int X { get; private set; }
-    public int Y { get; private set; }
-    public int Size { get; private set; }
+    [SerializeField]
+    private int _x, _y, _size;
 
-    public CellStatus Status { get; private set; }
-    public void SetToOccupied() { Status = CellStatus.Occupied; /*SetTextMeshColor( Color.clear );*/ }
-    public void SetToEmpty() { Status = CellStatus.Empty; /*SetTextMeshColor( Color.white );*/ }
-    public void SetToPath() { Status = CellStatus.Path; /*SetTextMeshColor( Color.green );*/ }
+    [SerializeField]
+    private CellStatus _cellStatus;
+
+    public readonly int X => _x;
+    public readonly int Y => _y;
+    public readonly int Size => _size;
+
+    public readonly CellStatus Status => _cellStatus;
+    public void SetToOccupied() { _cellStatus = CellStatus.Occupied; /*SetTextMeshColor( Color.clear );*/ }
+    public void SetToEmpty() { _cellStatus = CellStatus.Empty; /*SetTextMeshColor( Color.white );*/ }
+    public void SetToPath() { _cellStatus = CellStatus.Path; /*SetTextMeshColor( Color.green );*/ }
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
 
     public readonly Vector3 CellCenterToWorldSpace()
     {
 
-        return new Vector3( X + 0.5f, Y + 0.5f, 1 / Size ) * Size;
+        return new Vector3( X + 0.5f, Y + 0.5f, 1 / _size ) * _size;
 
     }
 
@@ -220,7 +237,7 @@ public struct Cell
 
     public override readonly string ToString()
     {
-        return $"({X},{Y})";
+        return $"({_x},{_y})";
     }
 
 }

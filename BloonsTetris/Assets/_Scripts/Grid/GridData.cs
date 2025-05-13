@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu( fileName = "GridData", menuName = "Scriptable Objects/GridData" ), Serializable]
@@ -9,13 +10,16 @@ public class GridData : ScriptableObject
     private int _rows, _columns, _cellSize;
 
     [SerializeField]
-    private Cell[,] _grid;
+    private Cell[] _grid;
 
-    public int Rows => _rows; 
+    private List<Vector2> _enemyWaypoints;
+
+    public int Rows => _rows;
     public int Columns => _columns;
     public int CellSize => _cellSize;
-    public Cell[,] Grid => _grid;
+    public Cell[] Grid => _grid;
 
+    [ExecuteAlways]
     public void CreateGrid( int rows, int cols, int cellSize )
     {
 
@@ -23,16 +27,20 @@ public class GridData : ScriptableObject
         _columns = cols;
         _cellSize = cellSize;
 
-        _grid = new Cell[ rows, cols ];
+        _grid = new Cell[ rows * cols ];
 
-        for ( int i = 0; i < rows; i++ )
+        _enemyWaypoints = new();
+
+        for ( int x = 0; x < rows; x++ )
         {
-            for ( int j = 0; j < cols; j++ )
+
+            for ( int y = 0; y < cols; y++ )
             {
 
-                Grid[ i, j ] = new Cell( i, j, cellSize );
+                _grid[ x + y * _columns ] = new Cell( x, y, cellSize );
 
             }
+
         }
 
     }

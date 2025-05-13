@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
 
         Actions = new( InputSystem.actions.FindAction( "MouseHover" ), InputSystem.actions.FindAction( "MouseDrag" ), InputSystem.actions.FindAction( "Rotate" ) );
 
-        _gridManager.GenerateBasicGrid( _gridManager.Rows, _gridManager.Cols );
+        _gridManager.GenerateBasicGrid( _gridManager.Rows, _gridManager.Columns );
 
     }
 
