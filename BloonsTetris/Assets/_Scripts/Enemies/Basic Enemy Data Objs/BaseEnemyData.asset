@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: BaseEnemyData
   m_EditorClassIdentifier: 
   MaxHP: 100
-  Speed: 10
+  Power: 0
+  Speed: 50
   Range: 10
+  AbilityCooldown: 0
+  DeathExplosionRadius: 0
+  DeathExplosionPower: 0
+  HasAbility: 0
   ElementalTypes: 0
   ElementalResistances: 0
   BaseStatusEffects: 0

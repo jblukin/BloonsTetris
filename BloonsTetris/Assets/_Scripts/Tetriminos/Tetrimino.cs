@@ -258,8 +258,19 @@ public class Tetrimino : MonoBehaviour
     public void OnTriggerExit2D( Collider2D collidingObject )
     {
 
-        if ( collidingObject.GetComponent<Enemy>() != null )
+        if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
+        {
+
             _enemiesInRange.Remove( collidingObject.gameObject );
+
+            if( _baseShape is DefaultShape.Square )
+            {
+
+                enemy.ClearStatusEffects( Enemy.StatusEffects.Slowed );
+
+            }
+
+        }
 
     }
     #endregion
@@ -385,8 +396,10 @@ public class Tetrimino : MonoBehaviour
 
             yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
 
+
             //Perform Ability Here
             Debug.Log( "Zigzag Used" );
+
 
             yield return new WaitForSeconds( _cooldown );
 
@@ -421,6 +434,14 @@ public class Tetrimino : MonoBehaviour
 
             //Perform Ability Here
             Debug.Log( "Square Used" );
+
+            foreach ( GameObject enemy in _enemiesInRange )
+            {
+
+                enemy.GetComponent<Enemy>().ReceiveAbility( _power, true, _elementalTypes );
+
+            }
+
 
             yield return new WaitForSeconds( _cooldown );
 
