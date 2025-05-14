@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Zigzag
   m_EditorClassIdentifier: 
   Power: 10
-  Cooldown: 10
+  Cooldown: 1
   Range: 10
   Shape: 5
+  ElementalTypes: 1
   localCellPositions:
   - {x: -1, y: 0}
   - {x: 0, y: 0}

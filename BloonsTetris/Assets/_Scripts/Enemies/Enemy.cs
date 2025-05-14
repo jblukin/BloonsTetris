@@ -25,7 +25,7 @@ public abstract class Enemy : MonoBehaviour
 
     }
 
-    protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue;
+    protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue, _slowedPercentage;
     protected ElementalTypes _elementalTypes;
     protected ElementalResistances _elementalResistances;
     protected StatusEffects _statusEffects;
@@ -34,7 +34,7 @@ public abstract class Enemy : MonoBehaviour
 
     public abstract void Init( BasicEnemyData enemyData );
 
-    public abstract void ReceiveAbility( float amountReceived = 0, ElementalTypes elementalTypes = 0, bool isHealing = false );
+    public abstract void ReceiveAbility( float amountReceived = 0, bool isPercentage = false, ElementalTypes elementalTypes = 0, bool isHealing = false );
 
     protected abstract void Move();
 
@@ -42,11 +42,13 @@ public abstract class Enemy : MonoBehaviour
 
     protected abstract float CalculateFinalReceivedHealth( float healthReceived, ElementalTypes elementalTypes = 0 );
 
-    protected abstract void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0 );
+    protected abstract void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 );
 
     protected abstract IEnumerator ProcessDamageOverTime( float tickRate, bool isFire );
 
     protected abstract IEnumerator UseAbility();
+
+    public abstract void ClearStatusEffects( StatusEffects statusEffectsToClear );
 
     protected abstract void OnDeath( bool deathByFire = false );
 

@@ -50,10 +50,10 @@ public class BaseEnemy : Enemy
 
     }
 
-    public override void ReceiveAbility( float amountReceived = 0, ElementalTypes elementalTypes = 0, bool isHealing = false )
+    public override void ReceiveAbility( float amountReceived = 0, bool isPercentage = false, ElementalTypes elementalTypes = 0, bool isHealing = false )
     {
 
-        if ( amountReceived > 0 )
+        if ( amountReceived > 0 && !isPercentage )
         {
 
             if ( isHealing )
@@ -77,7 +77,7 @@ public class BaseEnemy : Enemy
         }
 
         if ( elementalTypes is not 0 )
-            ProcessElementalEffects( elementalTypes );
+            ProcessElementalEffects( elementalTypes, 0, isPercentage ? amountReceived : 0 );
 
     }
 
@@ -85,7 +85,9 @@ public class BaseEnemy : Enemy
     {
         //Set to follow path from Grid Data in use
 
-        transform.position += _speed * Time.deltaTime * Vector3.left;
+        float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - ( _slowedPercentage * 0.01f ) ) : _speed;
+
+        transform.position += finalSpeed * Time.deltaTime * Vector3.left;
 
     }
 
@@ -199,7 +201,7 @@ public class BaseEnemy : Enemy
 
     }
 
-    protected override void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0 )
+    protected override void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 )
     {
 
         if ( elementalTypes.HasFlag( ElementalTypes.Fire ) )
@@ -235,6 +237,8 @@ public class BaseEnemy : Enemy
         if ( elementalTypes.HasFlag( ElementalTypes.Ice ) )
         {
 
+            _slowedPercentage = Mathf.Max( _slowedPercentage, incomingSlowPercentage );
+
             _statusEffects |= StatusEffects.Slowed;
 
         }
@@ -257,6 +261,21 @@ public class BaseEnemy : Enemy
 
     }
 
+    public override void ClearStatusEffects( StatusEffects statusEffectsToClear )
+    {
+
+        _statusEffects &= ~statusEffectsToClear;
+
+        if ( statusEffectsToClear.HasFlag( StatusEffects.Slowed ) )
+        {
+
+            _slowedPercentage = 0;
+
+        }
+
+
+    }
+
     protected override void Explode()
     {
 
@@ -268,7 +287,7 @@ public class BaseEnemy : Enemy
             if ( collider.TryGetComponent<Enemy>( out var enemy ) )
             {
 
-                enemy.ReceiveAbility( _deathExplosionPower, ElementalTypes.Fire );
+                enemy.ReceiveAbility( _deathExplosionPower, false, ElementalTypes.Fire );
 
             }
 
