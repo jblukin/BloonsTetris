@@ -438,7 +438,7 @@ public class Tetrimino : MonoBehaviour
             foreach ( GameObject enemy in _enemiesInRange )
             {
 
-                enemy.GetComponent<Enemy>().ReceiveAbility( _power, true, _elementalTypes );
+                enemy.GetComponent<Enemy>().ReceiveAbility( _power,_elementalTypes, true );
 
             }
 

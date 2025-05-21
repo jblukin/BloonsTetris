@@ -18,26 +18,27 @@ public class GridData : ScriptableObject
     public int Columns => _columns;
     public int CellSize => _cellSize;
     public Cell[] Grid => _grid;
+    public List<Vector2> EnemyWaypoints => _enemyWaypoints;
 
     [ExecuteAlways]
-    public void CreateGrid( int rows, int cols, int cellSize )
+    public void CreateGrid( int rows, int columns, int cellSize = 45 )
     {
 
         _rows = rows;
-        _columns = cols;
+        _columns = columns;
         _cellSize = cellSize;
 
-        _grid = new Cell[ rows * cols ];
+        _grid = new Cell[ rows * columns ];
 
         _enemyWaypoints = new();
 
-        for ( int x = 0; x < rows; x++ )
+        for ( int r = 0; r < rows; r++ )
         {
 
-            for ( int y = 0; y < cols; y++ )
+            for ( int c = 0; c < columns; c++ )
             {
 
-                _grid[ x + y * _columns ] = new Cell( x, y, cellSize );
+                _grid[ c + r * columns ] = new Cell( c, r, cellSize );
 
             }
 

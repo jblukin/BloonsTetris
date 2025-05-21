@@ -40,6 +40,7 @@ public class BaseEnemy : Enemy
         _statusEffects = enemyData.BaseStatusEffects;
         _deathExplosionPower = enemyData.DeathExplosionPower;
         _deathExplosionRadius = enemyData.DeathExplosionRadius;
+        _pathWaypoints = GameManager.Instance.GridManager.EnemyPathWaypoints;
 
         _poisonDoTValue = _fireDoTValue = 0;
 
@@ -50,7 +51,7 @@ public class BaseEnemy : Enemy
 
     }
 
-    public override void ReceiveAbility( float amountReceived = 0, bool isPercentage = false, ElementalTypes elementalTypes = 0, bool isHealing = false )
+    public override void ReceiveAbility( float amountReceived, ElementalTypes elementalTypes, bool isPercentage = false, bool isHealing = false )
     {
 
         if ( amountReceived > 0 && !isPercentage )
@@ -77,15 +78,18 @@ public class BaseEnemy : Enemy
         }
 
         if ( elementalTypes is not 0 )
-            ProcessElementalEffects( elementalTypes, 0, isPercentage ? amountReceived : 0 );
+            ProcessElementalEffects( elementalTypes, 0, isPercentage ? amountReceived * 0.01f : 0 );
 
     }
 
     protected override void Move()
     {
+
         //Set to follow path from Grid Data in use
 
-        float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - ( _slowedPercentage * 0.01f ) ) : _speed;
+        //Calculate Path Traversed Percentage
+
+        float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - ( _slowedPercentage ) ) : _speed;
 
         transform.position += finalSpeed * Time.deltaTime * Vector3.left;
 
@@ -287,7 +291,7 @@ public class BaseEnemy : Enemy
             if ( collider.TryGetComponent<Enemy>( out var enemy ) )
             {
 
-                enemy.ReceiveAbility( _deathExplosionPower, false, ElementalTypes.Fire );
+                enemy.ReceiveAbility( _deathExplosionPower, ElementalTypes.Fire );
 
             }
 

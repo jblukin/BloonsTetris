@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.Table;
+using Random = UnityEngine.Random;
 
 [DisallowMultipleComponent]
 public class GridManager : MonoBehaviour
@@ -15,12 +18,16 @@ public class GridManager : MonoBehaviour
     public int Columns { get { return _columns; } }
     public int CellSize { get { return _cellSize; } }
 
+    private Cell[,] _grid;
+    public Cell[,] Grid { get { return _grid; } }
+
+    [SerializeField]
+    private List<GridData> _premadeGridData;
 
     private Cell[] _editorGrid;
 
-
-    private Cell[,] _grid;
-    public Cell[,] Grid { get { return _grid; } }
+    private List<Vector2> _enemyPathWaypoints;
+    public List<Vector2> EnemyPathWaypoints { get { return _enemyPathWaypoints; } }
 
     #region Debug
 #if UNITY_EDITOR
@@ -64,6 +71,53 @@ public class GridManager : MonoBehaviour
 
     }
 
+    private void InitializeGrid( int rows = 15, int columns = 15 )
+    {
+
+        GridData gridData = _premadeGridData.Count > 0 ? _premadeGridData[ Random.Range( 0, _premadeGridData.Count ) ] : GenerateNewGrid( rows, columns );
+
+        _editorGrid = gridData.Grid;
+        _rows = gridData.Rows;
+        _columns = gridData.Columns;
+        _cellSize = gridData.CellSize;
+        _enemyPathWaypoints = gridData.EnemyWaypoints;
+
+        DrawGrid();
+
+    }
+
+    private void DrawGrid()
+    {
+
+
+        for ( int i = 0; i <= _rows; i++ )
+        {
+
+            Debug.DrawLine( new Vector3( 0, i, 10 ) * _cellSize, new Vector3( _columns, i, 10 ) * _cellSize, Color.white, 1000 );
+
+        }
+
+        for ( int i = 0; i <= _columns; i++ )
+        {
+
+            Debug.DrawLine( new Vector3( i, 0, 10 ) * _cellSize, new Vector3( i, _rows, 10 ) * _cellSize, Color.white, 1000 );
+
+        }
+
+    }
+
+    private GridData GenerateNewGrid( int rows, int columns )
+    {
+
+        GridData gridData = Instantiate( ScriptableObject.CreateInstance<GridData>() );
+
+        gridData.CreateGrid( rows, columns );
+
+        return gridData;
+
+
+    }
+
     public void GenerateBasicGrid( int rows, int cols )
     {
 
@@ -77,7 +131,7 @@ public class GridManager : MonoBehaviour
             for ( int j = 0; j < cols; j++ )
             {
 
-                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellStatus.Empty, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
+                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellState.Empty, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
 
                 if ( !_debugText )
                     _grid[ i, j ].SetTextMeshColor( Color.clear );
@@ -118,7 +172,7 @@ public class GridManager : MonoBehaviour
             int currCellX = mouseX + (int)Math.Floor( tetriminoCell.x ), currCellY = mouseY + (int)Math.Floor( tetriminoCell.y );
 
             if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _columns ||
-                    _grid[ currCellX, currCellY ].Status != Cell.CellStatus.Empty )
+                    _grid[ currCellX, currCellY ].State != Cell.CellState.Empty )
                 return false;
 
             newCells.Add( _grid[ currCellX, currCellY ] );
@@ -182,7 +236,7 @@ public class GridManager : MonoBehaviour
 public struct Cell
 {
 
-    public enum CellStatus
+    public enum CellState
     {
 
         Empty,
@@ -191,14 +245,14 @@ public struct Cell
 
     }
 
-    public Cell( int x, int y, int size, CellStatus cellStatus = CellStatus.Empty, TextMesh textMesh = null )
+    public Cell( int x, int y, int size, CellState cellState = CellState.Empty, TextMesh textMesh = null )
     {
 
         _x = x;
         _y = y;
         _size = size;
 
-        _cellStatus = cellStatus;
+        _cellState = cellState;
 
         _textMesh = textMesh;
 
@@ -210,16 +264,16 @@ public struct Cell
     private int _x, _y, _size;
 
     [SerializeField]
-    private CellStatus _cellStatus;
+    private CellState _cellState;
 
     public readonly int X => _x;
     public readonly int Y => _y;
     public readonly int Size => _size;
 
-    public readonly CellStatus Status => _cellStatus;
-    public void SetToOccupied() { _cellStatus = CellStatus.Occupied; /*SetTextMeshColor( Color.clear );*/ }
-    public void SetToEmpty() { _cellStatus = CellStatus.Empty; /*SetTextMeshColor( Color.white );*/ }
-    public void SetToPath() { _cellStatus = CellStatus.Path; /*SetTextMeshColor( Color.green );*/ }
+    public readonly CellState State => _cellState;
+    public void SetToOccupied() { _cellState = CellState.Occupied; /*SetTextMeshColor( Color.clear );*/ }
+    public void SetToEmpty() { _cellState = CellState.Empty; /*SetTextMeshColor( Color.white );*/ }
+    public void SetToPath() { _cellState = CellState.Path; /*SetTextMeshColor( Color.green );*/ }
 
     public readonly void SetTextMeshColor( Color color ) => _textMesh.color = color;
 

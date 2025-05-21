@@ -12,31 +12,35 @@ public class GridDataEditorWindow : EditorWindow
 
     private const string GRIDDATA_FOLDER_PATH = "Assets/_Scripts/Grid/GridData Objs/";
 
-    private VisualElement _inspectorPanel;
+    private VisualElement _inspectorPanel, _rightView;
+
+    private ListView _leftView;
 
     private static GridData _gridData;
+
+    private List<GridData> _allGridDataObjs;
 
     private void CreateGUI()
     {
 
         var GridDataGUIDs = AssetDatabase.FindAssets( "t:GridData" );
 
-        List<GridData> allGridDataObjs = new();
+        _allGridDataObjs = new();
 
         foreach ( var guid in GridDataGUIDs )
-            allGridDataObjs.Add( AssetDatabase.LoadAssetAtPath<GridData>( AssetDatabase.GUIDToAssetPath( guid ) ) );
+            _allGridDataObjs.Add( AssetDatabase.LoadAssetAtPath<GridData>( AssetDatabase.GUIDToAssetPath( guid ) ) );
 
-        if ( _gridData != null && allGridDataObjs.Count > 0 )
-            _gridData = allGridDataObjs.FirstOrDefault();
+        if ( _gridData != null && _allGridDataObjs.Count > 0 )
+            _gridData = _allGridDataObjs.FirstOrDefault();
 
         var splitView = new TwoPaneSplitView( 0, 240f, TwoPaneSplitViewOrientation.Horizontal );
         rootVisualElement.Add( splitView );
 
-        var leftView = new ListView
+        _leftView = new ListView
         {
             makeItem = () => new Label(),
-            bindItem = ( item, idx ) => { ( item as Label ).text = allGridDataObjs[ idx ].name; },
-            itemsSource = allGridDataObjs,
+            bindItem = ( item, idx ) => { ( item as Label ).text = _allGridDataObjs[ idx ].name; },
+            itemsSource = _allGridDataObjs,
             selectionType = SelectionType.Single,
             virtualizationMethod = CollectionVirtualizationMethod.FixedHeight,
             fixedItemHeight = 25,
@@ -49,10 +53,10 @@ public class GridDataEditorWindow : EditorWindow
 
             }
         };
-        splitView.Add( leftView );
+        splitView.Add( _leftView );
 
-        leftView.selectionChanged += OnGridDataSelectionChange;
-        leftView.onAdd = view =>
+        _leftView.selectionChanged += OnGridDataSelectionChange;
+        _leftView.onAdd = view =>
         {
             var gridData = CreateNewGridData();
             if ( gridData == null )
@@ -64,7 +68,7 @@ public class GridDataEditorWindow : EditorWindow
 
         };
 
-        leftView.onRemove = view =>
+        _leftView.onRemove = view =>
         {
 
             if ( view.itemsSource.Count == 0 )
@@ -80,10 +84,43 @@ public class GridDataEditorWindow : EditorWindow
 
         };
 
-        _inspectorPanel = new InspectorElement();
-        splitView.Add( _inspectorPanel );
+        _rightView = new VisualElement();
+        splitView.Add( _rightView );
 
-        leftView.schedule.Execute( () => leftView.SetSelection( leftView.itemsSource.IndexOf( _gridData ) ) );
+        DrawRightView();
+
+        _leftView.schedule.Execute( () => _leftView.SetSelection( _leftView.itemsSource.IndexOf( _gridData ) ) );
+
+    }
+
+    private void DrawRightView()
+    {
+
+        _rightView.Clear();
+
+        _inspectorPanel ??= new InspectorElement();
+
+        _rightView.Add( _inspectorPanel );
+
+        _rightView.Add( new Button( () =>
+        {
+
+            if ( _leftView.selectedItem != null )
+            {
+                _inspectorPanel = new InspectorElement( _leftView.selectedItem as GridData );
+                DrawRightView();
+            }
+        } )
+        {
+            text = "Refresh Grid",
+            style =
+            {
+                position = Position.Absolute,
+                left = 50,
+                bottom = 25,
+                fontSize = 24
+            }
+        } );
 
     }
 
@@ -94,7 +131,7 @@ public class GridDataEditorWindow : EditorWindow
             out string assetName, out int rows, out int cols, out int cellSize );
 
         if ( string.IsNullOrEmpty( assetName ) )
-            return null;
+            assetName = $"New GridData {_allGridDataObjs.Count + 1}";
 
         var gridData = CreateInstance<GridData>();
 
@@ -110,8 +147,6 @@ public class GridDataEditorWindow : EditorWindow
     private void OnGridDataSelectionChange( IEnumerable<object> selectedItems )
     {
 
-        _inspectorPanel.Clear();
-
         var enumerator = selectedItems.GetEnumerator();
 
         if ( enumerator.MoveNext() )
@@ -122,8 +157,9 @@ public class GridDataEditorWindow : EditorWindow
             if ( enumerator.Current != null )
             {
 
-                var inspector = new InspectorElement( selected );
-                _inspectorPanel.Add( inspector );
+                _inspectorPanel = new InspectorElement( selected );
+
+                DrawRightView();
 
             }
 
@@ -171,7 +207,6 @@ public class GridDataEditorWindow : EditorWindow
         _gridData = gridData;
 
         window.minSize = new Vector2( Screen.currentResolution.width / 2, Screen.currentResolution.height / 2 );
-        window.maxSize = new Vector2( Screen.currentResolution.width / 1.5f, Screen.currentResolution.height / 1.5f );
 
         window.Center();
 
@@ -186,7 +221,6 @@ public class GridDataEditorWindow : EditorWindow
         _gridData = null;
 
         window.minSize = new Vector2( Screen.currentResolution.width / 2, Screen.currentResolution.height / 2 );
-        window.maxSize = new Vector2( Screen.currentResolution.width / 1.5f, Screen.currentResolution.height / 1.5f );
 
         window.Center();
 
@@ -237,7 +271,7 @@ public class EditorInputPopupWindow : EditorWindow
         };
         gridInfoContainer.Add( colsInputField );
 
-        var cellSizeInputField = new SliderInt( "Cell Size", 40, 60 )
+        var cellSizeInputField = new SliderInt( "Cell Size", 20, 60 )
         {
             value = 45,
             showInputField = true,
@@ -361,41 +395,16 @@ public class EditorInputPopupWindow : EditorWindow
 public class GridDataEditor : Editor
 {
 
-    private VisualElement contentContainer;
+    private VisualElement _contentContainer, _inspectorContainer, _gridCellsContainer;
+
+    private SerializedProperty _gridProperty, _rowsProperty, _columnsProperty, _cellSizeProperty, _cellStateProperty;
 
     public override VisualElement CreateInspectorGUI()
     {
 
-        var inspectorContainer = new VisualElement()
-        {
-            name = "Base-Custom-Element",
-            style =
-            {
+        DrawEditor();
 
-                flexGrow = 1,
-                flexDirection = FlexDirection.Row,
-                alignItems = Align.FlexStart,
-                justifyContent = Justify.SpaceAround
-
-            }
-        };
-
-        if ( EditorWindow.HasOpenInstances<GridDataEditorWindow>() )
-        {
-
-            DrawEditor( inspectorContainer );
-
-            serializedObject.ApplyModifiedProperties();
-
-        }
-        else
-        {
-
-            DrawOpenEditorButton( inspectorContainer );
-
-        }
-
-        return inspectorContainer;
+        return _inspectorContainer;
 
     }
 
@@ -427,19 +436,47 @@ public class GridDataEditor : Editor
     }
     //End Sourced Code
 
-    private void DrawGrid( VisualElement gridCellsContainer, SerializedProperty grid )
+    private void DrawGrid( bool resizedGrid )
     {
 
-        for ( int i = 0; i < grid.arraySize; i++ )
+        if ( resizedGrid )
         {
 
-            gridCellsContainer.Add( new PropertyField( grid.GetArrayElementAtIndex( i ) ) );
+            _gridProperty.ClearArray();
+
+            for ( int r = 0; r < _rowsProperty.intValue; r++ )
+            {
+
+                for ( int c = 0; c < _columnsProperty.intValue; c++ )
+                {
+
+                    _gridProperty.InsertArrayElementAtIndex( _gridProperty.arraySize );
+
+                    var cell = _gridProperty.GetArrayElementAtIndex( _gridProperty.arraySize - 1 );
+
+                    cell.FindPropertyRelative( "_x" ).intValue = c;
+                    cell.FindPropertyRelative( "_y" ).intValue = r;
+                    cell.FindPropertyRelative( "_size" ).intValue = _cellSizeProperty.intValue;
+                    cell.FindPropertyRelative( "_cellState" ).enumValueIndex = 0;
+
+                }
+
+            }
+
+        }
+
+        serializedObject.ApplyModifiedProperties();
+
+        for ( int i = 0; i < _gridProperty.arraySize; i++ )
+        {
+
+            _gridCellsContainer.Add( new PropertyField( _gridProperty.GetArrayElementAtIndex( i ) ) );
 
         }
 
     }
 
-    private void DrawLegend( VisualElement gridDataLegendContainer, SerializedProperty cellSize )
+    private void DrawLegend( VisualElement gridDataLegendContainer )
     {
 
         var blackColorLegend = new VisualElement()
@@ -452,8 +489,8 @@ public class GridDataEditor : Editor
                     flexWrap = Wrap.NoWrap,
                     alignItems = Align.FlexStart,
                     justifyContent = Justify.SpaceBetween,
-                    height = cellSize.intValue,
-                    marginBottom = cellSize.intValue / 2
+                    height = _cellSizeProperty.intValue,
+                    marginBottom = _cellSizeProperty.intValue / 2
 
                 }
 
@@ -466,8 +503,8 @@ public class GridDataEditor : Editor
             style =
                 {
 
-                    height = cellSize.intValue,
-                    width = cellSize.intValue,
+                    height = _cellSizeProperty.intValue,
+                    width = _cellSizeProperty.intValue,
                     backgroundColor = Color.black
 
                 }
@@ -487,7 +524,7 @@ public class GridDataEditor : Editor
                     flexWrap = Wrap.NoWrap,
                     alignItems = Align.FlexStart,
                     justifyContent = Justify.SpaceBetween,
-                    height = cellSize.intValue
+                    height = _cellSizeProperty.intValue
 
                 }
 
@@ -500,8 +537,8 @@ public class GridDataEditor : Editor
             style =
                 {
 
-                    height = cellSize.intValue,
-                    width = cellSize.intValue,
+                    height = _cellSizeProperty.intValue,
+                    width = _cellSizeProperty.intValue,
                     backgroundColor = Color.red
 
                 }
@@ -513,25 +550,26 @@ public class GridDataEditor : Editor
 
     }
 
-    private void DrawInfoContainer( VisualElement gridInfoContainer, SerializedProperty rows, SerializedProperty columns, SerializedProperty cellSize )
+    private void DrawInfoContainer( VisualElement gridInfoContainer )
     {
 
         var rowsInputField = new SliderInt( "Rows", 15, 25 )
         {
-            value = rows.intValue,
+            value = _rowsProperty.intValue,
             showInputField = true,
             style =
                 {
                     height = 25,
-                flexGrow = 1
+                    flexGrow = 1
                 }
         };
-        rowsInputField.BindProperty( rows );
+        rowsInputField.BindProperty( _rowsProperty );
+        rowsInputField.RegisterValueChangedCallback( ( evt ) => { if ( evt.newValue != evt.previousValue ) { DrawGrid( true ); } } );
         gridInfoContainer.Add( rowsInputField );
 
         var colsInputField = new SliderInt( "Columns", 15, 25 )
         {
-            value = columns.intValue,
+            value = _columnsProperty.intValue,
             showInputField = true,
             style =
                 {
@@ -539,12 +577,13 @@ public class GridDataEditor : Editor
                     flexGrow = 1
                 }
         };
-        colsInputField.BindProperty( columns );
+        colsInputField.BindProperty( _columnsProperty );
+        colsInputField.RegisterValueChangedCallback( ( evt ) => { if ( evt.newValue != evt.previousValue ) { DrawGrid( true ); } } );
         gridInfoContainer.Add( colsInputField );
 
         var cellSizeInputField = new SliderInt( "Cell Size", 20, 60 )
         {
-            value = 45,
+            value = _cellSizeProperty.intValue,
             showInputField = true,
             style =
                 {
@@ -552,12 +591,13 @@ public class GridDataEditor : Editor
                     flexGrow = 1
                 }
         };
-        cellSizeInputField.BindProperty( cellSize );
+        cellSizeInputField.BindProperty( _cellSizeProperty );
+        cellSizeInputField.RegisterValueChangedCallback( ( evt ) => { if ( evt.newValue != evt.previousValue ) { DrawGrid( true ); } } );
         gridInfoContainer.Add( cellSizeInputField );
 
     }
 
-    private void DrawOpenEditorButton( VisualElement inspectorContainer )
+    private void DrawOpenEditorButton()
     {
 
         var button = new Button
@@ -571,34 +611,34 @@ public class GridDataEditor : Editor
                     flexBasis = StyleKeyword.Auto
                 }
         };
-        inspectorContainer.Add( button );
+        _inspectorContainer.Add( button );
 
         button.clicked += () => GridDataEditorWindow.OpenGridDataEditor( (GridData)target );
 
         //Original Code Sourced Here: https://discussions.unity.com/t/make-an-editor-expand-to-the-inspector-size/896693
-        inspectorContainer.RegisterCallback<GeometryChangedEvent>( ( evt ) =>
+        _inspectorContainer.RegisterCallback<GeometryChangedEvent>( ( evt ) =>
         {
 
-            if ( contentContainer == null )
+            if ( _contentContainer == null )
             {
 
-                var rootVisualContainer = FindParent<TemplateContainer>( inspectorContainer );
+                var rootVisualContainer = FindParent<TemplateContainer>( _inspectorContainer );
 
                 if ( rootVisualContainer != null )
-                    contentContainer = rootVisualContainer.Query<VisualElement>().Where( container => container.name == "unity-content-container" ).AtIndex( 1 );
+                    _contentContainer = rootVisualContainer.Query<VisualElement>().Where( container => container.name == "unity-content-container" ).AtIndex( 1 );
 
             }
 
-            if ( contentContainer != null )
+            if ( _contentContainer != null )
             {
 
-                contentContainer.parent.style.flexGrow = 1;
-                contentContainer.style.flexGrow = 1;
-                contentContainer.style.height = StyleKeyword.Auto;
-                var editorList = contentContainer.Q<VisualElement>( className: "unity-inspector-editors-list" );
+                _contentContainer.parent.style.flexGrow = 1;
+                _contentContainer.style.flexGrow = 1;
+                _contentContainer.style.height = StyleKeyword.Auto;
+                var editorList = _contentContainer.Q<VisualElement>( className: "unity-inspector-editors-list" );
                 editorList.style.flexGrow = 1;
                 editorList.Children().ElementAt( 1 ).style.flexGrow = 1;
-                SetBoxModelValuesToSame( contentContainer.Q<InspectorElement>(), 10, 0, 5 );
+                SetBoxModelValuesToSame( _contentContainer.Q<InspectorElement>(), 10, 0, 5 );
                 button.StretchToParentSize();
 
 
@@ -609,32 +649,57 @@ public class GridDataEditor : Editor
 
     }
 
-    private void DrawEditor( VisualElement inspectorContainer )
+    private void DrawEditor()
     {
 
-        var grid = serializedObject.FindProperty( "_grid" );
-        var rows = serializedObject.FindProperty( "_rows" );
-        var columns = serializedObject.FindProperty( "_columns" );
-        var cellSize = serializedObject.FindProperty( "_cellSize" );
+        _inspectorContainer = new VisualElement()
+        {
+            name = "Base-Custom-Element",
+            style =
+            {
+
+                flexGrow = 1,
+                flexDirection = FlexDirection.Row,
+                alignItems = Align.FlexStart,
+                justifyContent = Justify.SpaceBetween
+
+            }
+        };
+
+        if ( !EditorWindow.HasOpenInstances<GridDataEditorWindow>() )
+        {
+
+            DrawOpenEditorButton();
+
+            return;
+
+        }
+
+        _gridProperty = serializedObject.FindProperty( "_grid" );
+        _rowsProperty = serializedObject.FindProperty( "_rows" );
+        _columnsProperty = serializedObject.FindProperty( "_columns" );
+        _cellSizeProperty = serializedObject.FindProperty( "_cellSize" );
 
         var gridDataLegendContainer = new VisualElement()
         {
 
             style =
-                {
+            {
 
-                    flexDirection = FlexDirection.Column,
-                    alignItems = Align.FlexStart,
-                    justifyContent = Justify.SpaceBetween,
-                    width = Length.Auto(),
-                    height = Length.Auto(),
-                    marginTop = 10
+                flexGrow = 0,
+                flexShrink = 0,
+                flexDirection = FlexDirection.Column,
+                alignItems = Align.FlexStart,
+                justifyContent = Justify.SpaceBetween,
+                width = Length.Auto(),
+                height = Length.Auto(),
+                marginTop = 10
 
-                }
+            }
 
         };
-        inspectorContainer.Add( gridDataLegendContainer );
-        DrawLegend( gridDataLegendContainer, cellSize );
+        _inspectorContainer.Add( gridDataLegendContainer );
+        DrawLegend( gridDataLegendContainer );
 
         var inspector = new VisualElement()
         {
@@ -644,31 +709,36 @@ public class GridDataEditor : Editor
 
                 flexGrow = 1,
                 flexDirection = FlexDirection.Column,
-                alignItems = Align.Center
+                alignItems = Align.Center,
+                alignSelf = Align.Center,
+                justifyContent = Justify.SpaceBetween,
+                paddingTop = 20
 
             }
 
         };
-        inspectorContainer.Add( inspector );
+        _inspectorContainer.Add( inspector );
 
-        var gridCellsContainer = new VisualElement()
+        _gridCellsContainer = new VisualElement()
         {
 
             style =
                 {
 
-                    width = cellSize.intValue * rows.intValue,
-                    height = cellSize.intValue * columns.intValue,
-                    flexDirection = FlexDirection.RowReverse,
-                    alignItems = Align.FlexStart,
+                    width = _cellSizeProperty.intValue * _columnsProperty.intValue,
+                    height = _cellSizeProperty.intValue * _rowsProperty.intValue,
+                    flexDirection = FlexDirection.Row,
+                    flexGrow = 0,
+                    flexShrink = 1,
+                    alignContent = Align.FlexStart,
                     justifyContent = Justify.Center,
-                    flexWrap = Wrap.Wrap
+                    flexWrap = Wrap.WrapReverse
 
                 }
 
         };
-        inspector.Add( gridCellsContainer );
-        DrawGrid( gridCellsContainer, grid );
+        inspector.Add( _gridCellsContainer );
+        DrawGrid( false );
 
         var gridInfoContainer = new VisualElement()
         {
@@ -676,17 +746,21 @@ public class GridDataEditor : Editor
             style =
                 {
 
-                    paddingTop = 15,
+                    paddingTop = 20,
                     flexDirection = FlexDirection.Column,
                     flexGrow = 1,
-                    alignContent = Align.Stretch,
-                    width = Length.Percent( 100 )
+                    flexShrink = 1,
+                    alignContent = Align.Center,
+                    width = Length.Percent( 80 ),
+                    maxHeight = 100
 
                 }
 
         };
         inspector.Add( gridInfoContainer );
-        DrawInfoContainer( gridInfoContainer, rows, columns, cellSize );
+        DrawInfoContainer( gridInfoContainer );
+
+        serializedObject.ApplyModifiedProperties();
 
     }
 
@@ -714,53 +788,36 @@ public class GridDataEditor : Editor
 public class CellDrawer : PropertyDrawer
 {
 
-    private SerializedProperty _property;
-    private SerializedProperty _statusProperty, _sizeProperty;
-    private VisualElement _container, _parentContainer;
-
     public override VisualElement CreatePropertyGUI( SerializedProperty property )
     {
 
-        _property = property;
+        var xProperty = property.FindPropertyRelative( "_x" );
+        var yProperty = property.FindPropertyRelative( "_y" );
+        var sizeProperty = property.FindPropertyRelative( "_size" );
+        var stateProperty = property.FindPropertyRelative( "_cellState" );
 
-        _sizeProperty = _property.FindPropertyRelative( "_size" );
+        var parentContainer = new VisualElement();
 
-        _statusProperty = _property.FindPropertyRelative( "_cellStatus" );
+        parentContainer.style.alignItems = Align.Center;
 
-        _parentContainer = new VisualElement();
-        _container = new VisualElement()
-        {
+        parentContainer.Add( DrawCell( xProperty, yProperty, sizeProperty, stateProperty, parentContainer ) );
 
-            style =
-            {
+        parentContainer.Add( new Label( $"{xProperty.intValue}, {yProperty.intValue}" ) { style = { position = Position.Absolute, alignSelf = Align.Center, fontSize = sizeProperty.intValue / 2.75f }, pickingMode = PickingMode.Ignore } );
 
-                width = Length.Percent( 100 ),
-                height = Length.Percent( 100 )
-
-            }
-
-        };
-
-        _parentContainer.Add( _container );
-
-        _container.Add( DrawCell() );
-
-        property.serializedObject.ApplyModifiedProperties();
-
-        return _parentContainer;
+        return parentContainer;
 
     }
 
-    private VisualElement DrawCell()
+    private VisualElement DrawCell( SerializedProperty xProperty, SerializedProperty yProperty, SerializedProperty sizeProperty, SerializedProperty stateProperty, VisualElement parentContainer )
     {
 
         var element = new VisualElement()
         {
-
+            name = $"Cell {xProperty.intValue}, {yProperty.intValue}",
             style =
             {
-                width = _sizeProperty.intValue,
-                height = _sizeProperty.intValue,
+                width = sizeProperty.intValue,
+                height = sizeProperty.intValue,
                 borderBottomWidth = 1,
                 borderTopWidth = 1,
                 borderLeftWidth = 1,
@@ -769,56 +826,37 @@ public class CellDrawer : PropertyDrawer
                 borderTopColor = Color.white,
                 borderLeftColor = Color.white,
                 borderRightColor = Color.white,
-                backgroundColor = Color.black
+                backgroundColor = stateProperty.enumValueIndex == 0 ? Color.black : Color.red
             }
 
         };
 
-        element.AddManipulator( new Clickable( ( evt ) =>
-        {
-
-            ToggleCellStatus( evt.target as VisualElement );
-
-            UpdateCellState();
-
-        } ) );
+        parentContainer.RegisterCallback<ClickEvent>( ( evt ) => { ToggleCellStatus( stateProperty, element ); } );
 
         return element;
 
 
     }
 
-    private void ToggleCellStatus( VisualElement element )
+    private void ToggleCellStatus( SerializedProperty stateProperty, VisualElement element )
     {
 
-        Debug.Log( $"Clicked {element.name}" );
-
-        if ( _statusProperty.intValue == (int)Cell.CellStatus.Empty )
+        if ( stateProperty.enumValueIndex == (int)Cell.CellState.Empty )
         {
 
-            _statusProperty.intValue = (int)Cell.CellStatus.Path;
-
-            element.style.backgroundColor = Color.red;
+            stateProperty.enumValueIndex = (int)Cell.CellState.Path;
 
         }
-        else if ( _statusProperty.intValue == (int)Cell.CellStatus.Path )
+        else if ( stateProperty.enumValueIndex == (int)Cell.CellState.Path )
         {
 
-            _statusProperty.intValue = (int)Cell.CellStatus.Empty;
-
-            element.style.backgroundColor = Color.black;
+            stateProperty.enumValueIndex = (int)Cell.CellState.Empty;
 
         }
 
-        _statusProperty.serializedObject.ApplyModifiedProperties();
+        stateProperty.serializedObject.ApplyModifiedProperties();
 
-    }
-
-    private void UpdateCellState()
-    {
-
-        _container.Clear();
-        _container.Add( DrawCell() );
+        element.style.backgroundColor = stateProperty.enumValueIndex == 0 ? Color.black : Color.red;
 
     }
 
