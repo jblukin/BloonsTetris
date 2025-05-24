@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 100
   Power: 0
-  Speed: 50
+  Speed: 100
   Range: 10
   AbilityCooldown: 0
   DeathExplosionRadius: 0

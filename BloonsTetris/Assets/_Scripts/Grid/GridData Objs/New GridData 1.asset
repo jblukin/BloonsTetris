@@ -51,7 +51,7 @@ MonoBehaviour:
   - _x: 8
     _y: 0
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 0
     _size: 45
@@ -59,7 +59,7 @@ MonoBehaviour:
   - _x: 10
     _y: 0
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 0
     _size: 45
@@ -131,7 +131,7 @@ MonoBehaviour:
   - _x: 8
     _y: 1
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 1
     _size: 45
@@ -139,7 +139,7 @@ MonoBehaviour:
   - _x: 10
     _y: 1
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 1
     _size: 45
@@ -211,7 +211,7 @@ MonoBehaviour:
   - _x: 8
     _y: 2
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 2
     _size: 45
@@ -219,11 +219,11 @@ MonoBehaviour:
   - _x: 10
     _y: 2
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 2
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 2
     _size: 45
@@ -291,7 +291,7 @@ MonoBehaviour:
   - _x: 8
     _y: 3
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 3
     _size: 45
@@ -299,15 +299,15 @@ MonoBehaviour:
   - _x: 10
     _y: 3
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 3
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 3
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 13
     _y: 3
     _size: 45
@@ -339,15 +339,15 @@ MonoBehaviour:
   - _x: 0
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 1
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 2
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 4
     _size: 45
@@ -371,7 +371,7 @@ MonoBehaviour:
   - _x: 8
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 4
     _size: 45
@@ -379,15 +379,15 @@ MonoBehaviour:
   - _x: 10
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 4
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 13
     _y: 4
     _size: 45
@@ -499,15 +499,15 @@ MonoBehaviour:
   - _x: 0
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 1
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 2
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 6
     _size: 45
@@ -515,7 +515,7 @@ MonoBehaviour:
   - _x: 4
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 6
     _size: 45
@@ -539,31 +539,31 @@ MonoBehaviour:
   - _x: 10
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 13
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 15
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 16
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 17
     _y: 6
     _size: 45
@@ -571,7 +571,7 @@ MonoBehaviour:
   - _x: 18
     _y: 6
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 19
     _y: 6
     _size: 45
@@ -587,7 +587,7 @@ MonoBehaviour:
   - _x: 2
     _y: 7
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 7
     _size: 45
@@ -595,7 +595,7 @@ MonoBehaviour:
   - _x: 4
     _y: 7
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 7
     _size: 45
@@ -643,7 +643,7 @@ MonoBehaviour:
   - _x: 16
     _y: 7
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 17
     _y: 7
     _size: 45
@@ -651,7 +651,7 @@ MonoBehaviour:
   - _x: 18
     _y: 7
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 19
     _y: 7
     _size: 45
@@ -667,7 +667,7 @@ MonoBehaviour:
   - _x: 2
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 8
     _size: 45
@@ -675,7 +675,7 @@ MonoBehaviour:
   - _x: 4
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 8
     _size: 45
@@ -699,31 +699,31 @@ MonoBehaviour:
   - _x: 10
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 13
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 15
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 16
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 17
     _y: 8
     _size: 45
@@ -731,7 +731,7 @@ MonoBehaviour:
   - _x: 18
     _y: 8
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 19
     _y: 8
     _size: 45
@@ -747,7 +747,7 @@ MonoBehaviour:
   - _x: 2
     _y: 9
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 9
     _size: 45
@@ -755,7 +755,7 @@ MonoBehaviour:
   - _x: 4
     _y: 9
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 9
     _size: 45
@@ -827,7 +827,7 @@ MonoBehaviour:
   - _x: 2
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 10
     _size: 45
@@ -835,7 +835,7 @@ MonoBehaviour:
   - _x: 4
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 10
     _size: 45
@@ -859,31 +859,31 @@ MonoBehaviour:
   - _x: 10
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 13
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 15
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 16
     _y: 10
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 17
     _y: 10
     _size: 45
@@ -907,7 +907,7 @@ MonoBehaviour:
   - _x: 2
     _y: 11
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 11
     _size: 45
@@ -915,7 +915,7 @@ MonoBehaviour:
   - _x: 4
     _y: 11
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 11
     _size: 45
@@ -931,7 +931,7 @@ MonoBehaviour:
   - _x: 8
     _y: 11
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 11
     _size: 45
@@ -939,7 +939,7 @@ MonoBehaviour:
   - _x: 10
     _y: 11
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 11
     _size: 45
@@ -987,7 +987,7 @@ MonoBehaviour:
   - _x: 2
     _y: 12
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 12
     _size: 45
@@ -995,7 +995,7 @@ MonoBehaviour:
   - _x: 4
     _y: 12
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 12
     _size: 45
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   - _x: 8
     _y: 12
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 12
     _size: 45
@@ -1019,11 +1019,11 @@ MonoBehaviour:
   - _x: 10
     _y: 12
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 12
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 12
     _size: 45
@@ -1067,7 +1067,7 @@ MonoBehaviour:
   - _x: 2
     _y: 13
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 13
     _size: 45
@@ -1075,7 +1075,7 @@ MonoBehaviour:
   - _x: 4
     _y: 13
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 13
     _size: 45
@@ -1147,7 +1147,7 @@ MonoBehaviour:
   - _x: 2
     _y: 14
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 14
     _size: 45
@@ -1155,7 +1155,7 @@ MonoBehaviour:
   - _x: 4
     _y: 14
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 14
     _size: 45
@@ -1179,11 +1179,11 @@ MonoBehaviour:
   - _x: 10
     _y: 14
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 14
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 14
     _size: 45
@@ -1191,7 +1191,7 @@ MonoBehaviour:
   - _x: 13
     _y: 14
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 14
     _size: 45
@@ -1227,7 +1227,7 @@ MonoBehaviour:
   - _x: 2
     _y: 15
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 15
     _size: 45
@@ -1235,7 +1235,7 @@ MonoBehaviour:
   - _x: 4
     _y: 15
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 15
     _size: 45
@@ -1271,7 +1271,7 @@ MonoBehaviour:
   - _x: 13
     _y: 15
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 15
     _size: 45
@@ -1307,7 +1307,7 @@ MonoBehaviour:
   - _x: 2
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 3
     _y: 16
     _size: 45
@@ -1315,35 +1315,35 @@ MonoBehaviour:
   - _x: 4
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 6
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 7
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 8
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 10
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 16
     _size: 45
@@ -1351,7 +1351,7 @@ MonoBehaviour:
   - _x: 13
     _y: 16
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 14
     _y: 16
     _size: 45
@@ -1475,35 +1475,35 @@ MonoBehaviour:
   - _x: 4
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 5
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 6
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 7
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 8
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 9
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 10
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 11
     _y: 18
     _size: 45
-    _cellState: 0
+    _cellState: 2
   - _x: 12
     _y: 18
     _size: 45
@@ -1616,3 +1616,19 @@ MonoBehaviour:
     _y: 19
     _size: 45
     _cellState: 0
+  _enemyWaypoints:
+  - {x: 9, y: 0}
+  - {x: 10, y: 4}
+  - {x: 11, y: 5}
+  - {x: 17, y: 6}
+  - {x: 16, y: 9}
+  - {x: 10, y: 9}
+  - {x: 9, y: 11}
+  - {x: 12, y: 14}
+  - {x: 12, y: 16}
+  - {x: 10, y: 17}
+  - {x: 4, y: 17}
+  - {x: 3, y: 15}
+  - {x: 3, y: 6}
+  - {x: 1, y: 5}
+  - {x: 0, y: 5}

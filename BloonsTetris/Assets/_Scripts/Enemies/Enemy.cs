@@ -26,6 +26,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue, _slowedPercentage, _pathTraversedPercentage;
+    protected int _currentWaypointIdx;
     protected ElementalTypes _elementalTypes;
     protected ElementalResistances _elementalResistances;
     protected StatusEffects _statusEffects;

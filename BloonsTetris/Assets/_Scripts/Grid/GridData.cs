@@ -12,13 +12,14 @@ public class GridData : ScriptableObject
     [SerializeField]
     private Cell[] _grid;
 
-    private List<Vector2> _enemyWaypoints;
+    [SerializeField]
+    private List<Vector2Int> _enemyWaypoints;
 
     public int Rows => _rows;
     public int Columns => _columns;
     public int CellSize => _cellSize;
     public Cell[] Grid => _grid;
-    public List<Vector2> EnemyWaypoints => _enemyWaypoints;
+    public List<Vector2Int> EnemyWaypoints => _enemyWaypoints;
 
     [ExecuteAlways]
     public void CreateGrid( int rows, int columns, int cellSize = 45 )

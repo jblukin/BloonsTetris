@@ -18,17 +18,19 @@ public class EnemyManager : MonoBehaviour
 
         GameObject gameObject = new();
 
-        BaseEnemy enemy = gameObject.AddComponent<BaseEnemy>();
-
         SpriteRenderer r = gameObject.AddComponent<SpriteRenderer>();
 
         r.sprite = _enemySprite;
 
-        gameObject.transform.localScale *= GameManager.Instance.GridManager.CellSize;
+        r.color = Color.red;   
+
+        gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, gameObject.transform.localScale.y, 1 / GameManager.Instance.GridManager.CellSize ) * GameManager.Instance.GridManager.CellSize;
 
         gameObject.name = $"BaseEnemy{_basicEnemyDataObjs.Count}";
 
-        gameObject.transform.position = new( 400f, 200f, 1f );
+        gameObject.transform.position = GameManager.Instance.GridManager.EnemyPathWaypoints[ 0 ];
+
+        BaseEnemy enemy = gameObject.AddComponent<BaseEnemy>();
 
         enemy.Init( Instantiate( _basicEnemyDataObjs[ 0 ] ) );
 

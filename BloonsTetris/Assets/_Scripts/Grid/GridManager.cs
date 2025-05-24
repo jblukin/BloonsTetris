@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static UnityEngine.Rendering.DebugUI.Table;
@@ -18,7 +19,9 @@ public class GridManager : MonoBehaviour
     public int Columns { get { return _columns; } }
     public int CellSize { get { return _cellSize; } }
 
+    [Obsolete]
     private Cell[,] _grid;
+    [Obsolete]
     public Cell[,] Grid { get { return _grid; } }
 
     [SerializeField]
@@ -28,6 +31,9 @@ public class GridManager : MonoBehaviour
 
     private List<Vector2> _enemyPathWaypoints;
     public List<Vector2> EnemyPathWaypoints { get { return _enemyPathWaypoints; } }
+
+    [SerializeField]
+    private Sprite _pathSprite;
 
     #region Debug
 #if UNITY_EDITOR
@@ -56,7 +62,7 @@ public class GridManager : MonoBehaviour
         if ( _currentCell.IsInitialized() && ( _currentCell.X != mouseX || _currentCell.Y != mouseY ) )
             _currentCell.SetTextMeshColor( Color.white );
 
-        _currentCell = _grid[ mouseX, mouseY ];
+        _currentCell = GetGridCell( mouseX, mouseY );
 
         _currentCell.SetTextMeshColor( Color.red );
 
@@ -71,7 +77,7 @@ public class GridManager : MonoBehaviour
 
     }
 
-    private void InitializeGrid( int rows = 15, int columns = 15 )
+    public void InitializeGrid( int rows = 15, int columns = 15 )
     {
 
         GridData gridData = _premadeGridData.Count > 0 ? _premadeGridData[ Random.Range( 0, _premadeGridData.Count ) ] : GenerateNewGrid( rows, columns );
@@ -80,14 +86,48 @@ public class GridManager : MonoBehaviour
         _rows = gridData.Rows;
         _columns = gridData.Columns;
         _cellSize = gridData.CellSize;
-        _enemyPathWaypoints = gridData.EnemyWaypoints;
+        _enemyPathWaypoints = ConvertPathToWorldSpace( gridData.EnemyWaypoints );
 
         DrawGrid();
 
     }
 
+    private List<Vector2> ConvertPathToWorldSpace( List<Vector2Int> waypointCells )
+    {
+
+        List<Vector2> worldSpaceWaypoints = new();
+
+        foreach ( var waypointCell in waypointCells )
+        {
+
+            worldSpaceWaypoints.Add( new Vector2( waypointCell.x + 0.5f, waypointCell.y + 0.5f ) * _cellSize );
+
+        }
+
+        return worldSpaceWaypoints;
+
+    }
+
     private void DrawGrid()
     {
+
+        foreach( var cell in _editorGrid )
+        {
+
+            if ( cell.State is not Cell.CellState.Path )
+                continue;
+
+            var pathSprite = new GameObject("Pathing");
+
+            pathSprite.transform.localScale *= _cellSize;
+
+            pathSprite.transform.position = cell.CellCenterToWorldSpace();
+
+            pathSprite.AddComponent<SpriteRenderer>();
+
+            pathSprite.GetComponent<SpriteRenderer>().sprite = _pathSprite;
+
+        }
 
 
         for ( int i = 0; i <= _rows; i++ )
@@ -109,6 +149,8 @@ public class GridManager : MonoBehaviour
     private GridData GenerateNewGrid( int rows, int columns )
     {
 
+        Debug.LogWarning( "Enemy Pathing Not Implemented For This Method Yet!" );
+
         GridData gridData = Instantiate( ScriptableObject.CreateInstance<GridData>() );
 
         gridData.CreateGrid( rows, columns );
@@ -118,6 +160,7 @@ public class GridManager : MonoBehaviour
 
     }
 
+    [Obsolete]
     public void GenerateBasicGrid( int rows, int cols )
     {
 
@@ -172,14 +215,14 @@ public class GridManager : MonoBehaviour
             int currCellX = mouseX + (int)Math.Floor( tetriminoCell.x ), currCellY = mouseY + (int)Math.Floor( tetriminoCell.y );
 
             if ( currCellX < 0 || currCellY >= _rows || currCellY < 0 || currCellX >= _columns ||
-                    _grid[ currCellX, currCellY ].State != Cell.CellState.Empty )
+                    GetGridCell( currCellX, currCellY ).State != Cell.CellState.Empty )
                 return false;
 
-            newCells.Add( _grid[ currCellX, currCellY ] );
+            newCells.Add( GetGridCell( currCellX, currCellY ) );
 
         }
 
-        newPosition = _grid[ mouseX, mouseY ].CellCenterToWorldSpace();
+        newPosition = GetGridCell( mouseX, mouseY ).CellCenterToWorldSpace();
 
         return true;
 
@@ -190,7 +233,7 @@ public class GridManager : MonoBehaviour
 
         _debugHighlight = _debugText = !_debugText;
 
-        foreach ( Cell c in _grid )
+        foreach ( Cell c in _editorGrid )
         {
 
             c.SetTextMeshColor( _debugText ? Color.white : Color.clear );

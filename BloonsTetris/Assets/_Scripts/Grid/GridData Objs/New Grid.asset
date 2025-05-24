@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dc87b4534c156c44a65f03f11be54a8, type: 3}
   m_Name: New Grid
   m_EditorClassIdentifier: 
-  _rows: 25
-  _columns: 25
+  _rows: 18
+  _columns: 17
   _cellSize: 40
   _grid:
   - _x: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   - _x: 13
     _y: 0
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 14
     _y: 0
     _size: 40
@@ -84,38 +84,6 @@ MonoBehaviour:
     _y: 0
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 0
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 0
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 1
     _size: 40
@@ -171,7 +139,7 @@ MonoBehaviour:
   - _x: 13
     _y: 1
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 14
     _y: 1
     _size: 40
@@ -181,38 +149,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 1
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 1
     _size: 40
     _cellState: 0
@@ -271,7 +207,7 @@ MonoBehaviour:
   - _x: 13
     _y: 2
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 14
     _y: 2
     _size: 40
@@ -281,38 +217,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 2
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 2
     _size: 40
     _cellState: 0
@@ -371,48 +275,16 @@ MonoBehaviour:
   - _x: 13
     _y: 3
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 14
     _y: 3
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 15
     _y: 3
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 3
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 3
     _size: 40
     _cellState: 0
@@ -475,44 +347,12 @@ MonoBehaviour:
   - _x: 14
     _y: 4
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 15
     _y: 4
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 4
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 4
     _size: 40
     _cellState: 0
@@ -575,44 +415,12 @@ MonoBehaviour:
   - _x: 14
     _y: 5
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 15
     _y: 5
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 5
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 5
     _size: 40
     _cellState: 0
@@ -639,80 +447,48 @@ MonoBehaviour:
   - _x: 5
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 6
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 7
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 8
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 9
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 10
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 11
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 12
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 13
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 14
     _y: 6
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 15
     _y: 6
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 6
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 6
     _size: 40
     _cellState: 0
@@ -739,7 +515,7 @@ MonoBehaviour:
   - _x: 5
     _y: 7
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 6
     _y: 7
     _size: 40
@@ -784,38 +560,6 @@ MonoBehaviour:
     _y: 7
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 7
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 7
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 8
     _size: 40
@@ -839,7 +583,7 @@ MonoBehaviour:
   - _x: 5
     _y: 8
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 6
     _y: 8
     _size: 40
@@ -884,38 +628,6 @@ MonoBehaviour:
     _y: 8
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 8
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 8
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 9
     _size: 40
@@ -939,7 +651,7 @@ MonoBehaviour:
   - _x: 5
     _y: 9
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 6
     _y: 9
     _size: 40
@@ -984,38 +696,6 @@ MonoBehaviour:
     _y: 9
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 9
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 9
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 10
     _size: 40
@@ -1039,7 +719,7 @@ MonoBehaviour:
   - _x: 5
     _y: 10
     _size: 40
-    _cellState: 2
+    _cellState: 0
   - _x: 6
     _y: 10
     _size: 40
@@ -1081,38 +761,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 10
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 10
     _size: 40
     _cellState: 0
@@ -1184,38 +832,6 @@ MonoBehaviour:
     _y: 11
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 11
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 11
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 12
     _size: 40
@@ -1281,38 +897,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 12
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 12
     _size: 40
     _cellState: 0
@@ -1384,38 +968,6 @@ MonoBehaviour:
     _y: 13
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 13
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 13
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 14
     _size: 40
@@ -1481,38 +1033,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 14
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 14
     _size: 40
     _cellState: 0
@@ -1584,38 +1104,6 @@ MonoBehaviour:
     _y: 15
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 15
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 15
-    _size: 40
-    _cellState: 0
   - _x: 0
     _y: 16
     _size: 40
@@ -1681,38 +1169,6 @@ MonoBehaviour:
     _size: 40
     _cellState: 0
   - _x: 16
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 16
-    _size: 40
-    _cellState: 0
-  - _x: 24
     _y: 16
     _size: 40
     _cellState: 0
@@ -1784,735 +1240,4 @@ MonoBehaviour:
     _y: 17
     _size: 40
     _cellState: 0
-  - _x: 17
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 17
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 18
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 19
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 20
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 21
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 22
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 23
-    _size: 40
-    _cellState: 0
-  - _x: 0
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 1
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 2
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 3
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 4
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 5
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 6
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 7
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 8
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 9
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 10
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 11
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 12
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 13
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 14
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 15
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 16
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 17
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 18
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 19
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 20
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 21
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 22
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 23
-    _y: 24
-    _size: 40
-    _cellState: 0
-  - _x: 24
-    _y: 24
-    _size: 40
-    _cellState: 0
+  _enemyWaypoints: []

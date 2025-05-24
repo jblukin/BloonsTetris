@@ -42,7 +42,8 @@ public class BaseEnemy : Enemy
         _deathExplosionRadius = enemyData.DeathExplosionRadius;
         _pathWaypoints = GameManager.Instance.GridManager.EnemyPathWaypoints;
 
-        _poisonDoTValue = _fireDoTValue = 0;
+        _currentWaypointIdx = 1;
+        _pathTraversedPercentage = _poisonDoTValue = _fireDoTValue = 0;
 
         if ( enemyData.HasAbility )
             _abilityAction = StartCoroutine( UseAbility() );
@@ -85,13 +86,34 @@ public class BaseEnemy : Enemy
     protected override void Move()
     {
 
-        //Set to follow path from Grid Data in use
-
         //Calculate Path Traversed Percentage
+        //_pathTraversedPercentage = ((float)_currentWaypointIdx / _pathWaypoints.Count) + ();
 
         float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - ( _slowedPercentage ) ) : _speed;
 
-        transform.position += finalSpeed * Time.deltaTime * Vector3.left;
+        finalSpeed *= Time.deltaTime;
+
+        if ( Vector2.Distance( transform.position, _pathWaypoints[ _currentWaypointIdx ] ) < finalSpeed )
+        {
+
+            _currentWaypointIdx++;
+
+            if ( _currentWaypointIdx == _pathWaypoints.Count )
+            {
+
+                Destroy( gameObject );
+
+                return;
+
+            }
+
+        }
+
+        Vector2 dir = _pathWaypoints[ _currentWaypointIdx ] - new Vector2( transform.position.x, transform.position.y );
+
+        dir.Normalize();
+
+        transform.Translate( finalSpeed * dir );
 
     }
 

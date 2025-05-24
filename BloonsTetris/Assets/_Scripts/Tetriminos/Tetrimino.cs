@@ -125,7 +125,7 @@ public class Tetrimino : MonoBehaviour
             return;
 
         foreach ( Cell cell in _currentCells )
-            _gridManager.Grid[ cell.X, cell.Y ].SetToEmpty();
+            _gridManager.GetGridCell( cell.X, cell.Y ).SetToEmpty();
 
         if ( GameManager.Instance.GridManager.TryPlaceTetriminoShape( _localCellPositions, out List<Cell> newCells, out Vector3 newPosition ) )
         {
@@ -133,7 +133,7 @@ public class Tetrimino : MonoBehaviour
             _currentCells = newCells;
 
             foreach ( Cell cell in _currentCells )
-                _gridManager.Grid[ cell.X, cell.Y ].SetToOccupied();
+                _gridManager.GetGridCell( cell.X, cell.Y ).SetToOccupied();
 
             transform.position = _currentPosition = newPosition;
 
@@ -142,7 +142,7 @@ public class Tetrimino : MonoBehaviour
         {
 
             foreach ( Cell cell in _currentCells )
-                _gridManager.Grid[ cell.X, cell.Y ].SetToOccupied();
+                _gridManager.GetGridCell( cell.X, cell.Y ).SetToOccupied();
 
             transform.SetPositionAndRotation( _currentPosition, _currentRotation );
 
@@ -263,7 +263,7 @@ public class Tetrimino : MonoBehaviour
 
             _enemiesInRange.Remove( collidingObject.gameObject );
 
-            if( _baseShape is DefaultShape.Square )
+            if ( _baseShape is DefaultShape.Square )
             {
 
                 enemy.ClearStatusEffects( Enemy.StatusEffects.Slowed );
@@ -438,7 +438,7 @@ public class Tetrimino : MonoBehaviour
             foreach ( GameObject enemy in _enemiesInRange )
             {
 
-                enemy.GetComponent<Enemy>().ReceiveAbility( _power,_elementalTypes, true );
+                enemy.GetComponent<Enemy>().ReceiveAbility( _power, _elementalTypes, true );
 
             }
 

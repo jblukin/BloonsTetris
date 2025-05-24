@@ -185,20 +185,6 @@ public class GridDataEditorWindow : EditorWindow
 
     }
 
-    public void OnDestroy()
-    {
-
-        var gridDataEditor = FindFirstObjectByType( typeof( GridDataEditor ) ) as GridDataEditor;
-
-        if ( gridDataEditor != null )
-        {
-
-            gridDataEditor.Repaint();
-
-        }
-
-    }
-
     public static void OpenGridDataEditor( GridData gridData )
     {
 
@@ -223,6 +209,34 @@ public class GridDataEditorWindow : EditorWindow
         window.minSize = new Vector2( Screen.currentResolution.width / 2, Screen.currentResolution.height / 2 );
 
         window.Center();
+
+    }
+
+    private void OnDisable()
+    {
+
+        var gridDataEditor = FindFirstObjectByType( typeof( GridDataEditor ) ) as GridDataEditor;
+
+        if ( gridDataEditor != null )
+        {
+
+            gridDataEditor.Repaint();
+
+        }
+
+    }
+
+    private void OnDestroy()
+    {
+
+        var gridDataEditor = FindFirstObjectByType( typeof( GridDataEditor ) ) as GridDataEditor;
+
+        if ( gridDataEditor != null )
+        {
+
+            gridDataEditor.Repaint();
+
+        }
 
     }
 
@@ -397,7 +411,9 @@ public class GridDataEditor : Editor
 
     private VisualElement _contentContainer, _inspectorContainer, _gridCellsContainer;
 
-    private SerializedProperty _gridProperty, _rowsProperty, _columnsProperty, _cellSizeProperty, _cellStateProperty;
+    private ListView _enemyWaypointsListView;
+
+    private SerializedProperty _gridProperty, _rowsProperty, _columnsProperty, _cellSizeProperty, _enemyWaypointsProperty;
 
     public override VisualElement CreateInspectorGUI()
     {
@@ -469,8 +485,11 @@ public class GridDataEditor : Editor
 
         for ( int i = 0; i < _gridProperty.arraySize; i++ )
         {
+            var cellField = new PropertyField( _gridProperty.GetArrayElementAtIndex( i ) );
 
-            _gridCellsContainer.Add( new PropertyField( _gridProperty.GetArrayElementAtIndex( i ) ) );
+            cellField.RegisterCallback<MouseDownEvent>( ( evt ) => { if ( evt.button == 1 ) ToggleAsEnemyWaypoint( cellField ); } );
+
+            _gridCellsContainer.Add( cellField );
 
         }
 
@@ -547,6 +566,34 @@ public class GridDataEditor : Editor
         redColorLegend.Add( redColorBlock );
 
         redColorLegend.Add( new Label( "Enemy Path" ) { style = { fontSize = 24, marginLeft = 10, alignSelf = Align.Center } } );
+
+        _enemyWaypointsListView = new ListView()
+        {
+
+            makeItem = () => new Label(),
+            bindItem = ( item, idx ) => { var label = ( item as Label ); label.text = _enemyWaypointsProperty.GetArrayElementAtIndex( idx ).vector2IntValue.ToString(); label.style.fontSize = 24; label.style.alignItems = Align.Center; },
+            selectionType = SelectionType.Single,
+            virtualizationMethod = CollectionVirtualizationMethod.FixedHeight,
+            fixedItemHeight = 50,
+            reorderable = true,
+            reorderMode = ListViewReorderMode.Animated,
+            showBoundCollectionSize = false,
+            showBorder = true,
+            showAddRemoveFooter = false,
+            style =
+            {
+
+                flexGrow = 1,
+                flexShrink = 1,
+                paddingTop = 20,
+                maxWidth = 200,
+                width = Length.Auto()
+
+            }
+
+        };
+        _enemyWaypointsListView.BindProperty( _enemyWaypointsProperty );
+        gridDataLegendContainer.Add( _enemyWaypointsListView );
 
     }
 
@@ -679,6 +726,7 @@ public class GridDataEditor : Editor
         _rowsProperty = serializedObject.FindProperty( "_rows" );
         _columnsProperty = serializedObject.FindProperty( "_columns" );
         _cellSizeProperty = serializedObject.FindProperty( "_cellSize" );
+        _enemyWaypointsProperty = serializedObject.FindProperty( "_enemyWaypoints" );
 
         var gridDataLegendContainer = new VisualElement()
         {
@@ -782,6 +830,56 @@ public class GridDataEditor : Editor
 
     }
 
+    private void ToggleAsEnemyWaypoint( PropertyField cellField )
+    {
+
+        serializedObject.Update();
+
+        var cell = serializedObject.FindProperty( cellField.bindingPath );
+
+        Vector2Int cellXY = new( cell.FindPropertyRelative( "_x" ).intValue, cell.FindPropertyRelative( "_y" ).intValue );
+
+        var cellParentContainer = cellField.Q<VisualElement>( name: "Cell-Parent-Container" );
+
+        if ( _enemyWaypointsProperty.arraySize > 0 )
+        {
+
+            var waypoints = _enemyWaypointsProperty.GetArrayElementAtIndex( 0 );
+
+            do
+            {
+
+                if ( waypoints.vector2IntValue == cellXY )
+                {
+
+                    _enemyWaypointsListView.viewController.itemsSource.Remove( cellXY );
+
+                    _enemyWaypointsListView.RefreshItems();
+
+                    waypoints.DeleteCommand();
+
+                    serializedObject.ApplyModifiedProperties();
+
+                    return;
+
+                }
+
+
+            } while ( waypoints.Next( false ) );
+
+        }
+
+        _enemyWaypointsProperty.InsertArrayElementAtIndex( _enemyWaypointsProperty.arraySize );
+
+        var newWaypoint = _enemyWaypointsProperty.GetArrayElementAtIndex( _enemyWaypointsProperty.arraySize - 1 );
+
+        newWaypoint.vector2IntValue = cellXY;
+
+        serializedObject.ApplyModifiedProperties();
+
+        _enemyWaypointsListView.RefreshItems();
+    }
+
 }
 
 [CustomPropertyDrawer( typeof( Cell ) )]
@@ -796,7 +894,10 @@ public class CellDrawer : PropertyDrawer
         var sizeProperty = property.FindPropertyRelative( "_size" );
         var stateProperty = property.FindPropertyRelative( "_cellState" );
 
-        var parentContainer = new VisualElement();
+        var parentContainer = new VisualElement
+        {
+            name = "Cell-Parent-Container"
+        };
 
         parentContainer.style.alignItems = Align.Center;
 
@@ -840,6 +941,8 @@ public class CellDrawer : PropertyDrawer
 
     private void ToggleCellStatus( SerializedProperty stateProperty, VisualElement element )
     {
+
+        stateProperty.serializedObject.Update();
 
         if ( stateProperty.enumValueIndex == (int)Cell.CellState.Empty )
         {
