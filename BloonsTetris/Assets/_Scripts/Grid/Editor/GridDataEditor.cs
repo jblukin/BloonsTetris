@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
@@ -12,9 +13,11 @@ public class GridDataEditorWindow : EditorWindow
 
     private const string GRIDDATA_FOLDER_PATH = "Assets/_Scripts/Grid/GridData Objs/";
 
-    private VisualElement _inspectorPanel, _rightView;
+    private VisualElement _rightView;
 
     private ListView _leftView;
+
+    private InspectorElement _inspectorPanel;
 
     private static GridData _gridData;
 
@@ -458,7 +461,23 @@ public class GridDataEditor : Editor
         if ( resizedGrid )
         {
 
+            var prevGridDeepCopy = new SerializedObject( Instantiate( serializedObject.targetObjects[ 0 ] ) );
+
+            var prevGrid = prevGridDeepCopy.FindProperty( "_grid" );
+
+            var finalCell = prevGrid.GetArrayElementAtIndex( prevGrid.arraySize - 1 );
+
+            int prevRows = finalCell.FindPropertyRelative( "_y" ).intValue + 1;
+
+            int prevColumns = finalCell.FindPropertyRelative( "_x" ).intValue + 1;
+
+            var prevGridCell = prevGrid.GetArrayElementAtIndex( 0 );
+
+            bool prevGridValid = true;
+
             _gridProperty.ClearArray();
+
+            int colDiff = prevColumns - _columnsProperty.intValue;
 
             for ( int r = 0; r < _rowsProperty.intValue; r++ )
             {
@@ -473,7 +492,37 @@ public class GridDataEditor : Editor
                     cell.FindPropertyRelative( "_x" ).intValue = c;
                     cell.FindPropertyRelative( "_y" ).intValue = r;
                     cell.FindPropertyRelative( "_size" ).intValue = _cellSizeProperty.intValue;
-                    cell.FindPropertyRelative( "_cellState" ).enumValueIndex = 0;
+
+                    var cellState = cell.FindPropertyRelative( "_cellState" );
+
+                    //Debug.Log( $"Iteration {_gridProperty.arraySize} vs {prevGrid.arraySize}: {prevGridValid}" );
+
+                    if ( prevGridValid && r < prevRows && c < prevColumns )
+                    {
+
+                        cellState.enumValueIndex = prevGridCell.FindPropertyRelative( "_cellState" ).enumValueIndex;
+
+                        if ( !prevGridCell.Next( false ) )
+                            prevGridValid = false;
+
+                    }
+                    else
+                    {
+
+                        cellState.enumValueIndex = 0;
+
+                    }
+
+                }
+
+                if ( prevGridValid )
+                {
+
+                    for ( int i = 0; i < colDiff; i++ )
+                    {
+                        if ( !prevGridCell.Next( false ) )
+                            prevGridValid = false;
+                    }
 
                 }
 
@@ -600,7 +649,7 @@ public class GridDataEditor : Editor
     private void DrawInfoContainer( VisualElement gridInfoContainer )
     {
 
-        var rowsInputField = new SliderInt( "Rows", 15, 25 )
+        var rowsInputField = new SliderInt( "Rows", 1, 25 )
         {
             value = _rowsProperty.intValue,
             showInputField = true,
@@ -614,7 +663,7 @@ public class GridDataEditor : Editor
         rowsInputField.RegisterValueChangedCallback( ( evt ) => { if ( evt.newValue != evt.previousValue ) { DrawGrid( true ); } } );
         gridInfoContainer.Add( rowsInputField );
 
-        var colsInputField = new SliderInt( "Columns", 15, 25 )
+        var colsInputField = new SliderInt( "Columns", 1, 25 )
         {
             value = _columnsProperty.intValue,
             showInputField = true,
