@@ -96,7 +96,7 @@ public class GridDataEditorWindow : EditorWindow
 
     }
 
-    private void DrawRightView()
+    public void DrawRightView()
     {
 
         _rightView.Clear();
@@ -131,7 +131,10 @@ public class GridDataEditorWindow : EditorWindow
     {
 
         EditorInputPopupWindow.PromptInput( "Create New GridData Asset", "Please define GridData properties:", position,
-            out string assetName, out int rows, out int cols, out int cellSize );
+            out string assetName, out int rows, out int cols, out int cellSize, out bool cancelled );
+
+        if ( cancelled )
+            return null;
 
         if ( string.IsNullOrEmpty( assetName ) )
             assetName = $"New GridData {_allGridDataObjs.Count + 1}";
@@ -248,11 +251,12 @@ public class GridDataEditorWindow : EditorWindow
 public class EditorInputPopupWindow : EditorWindow
 {
 
-    public static void PromptInput( string title, string desc, Rect parentRect, out string assetName, out int rows, out int cols, out int cellSize, string placeholderInputText = "Name your new GridData", string confirmButtonText = "Confirm", string cancelButtonText = "Cancel" )
+    public static void PromptInput( string title, string desc, Rect parentRect, out string assetName, out int rows, out int cols, out int cellSize, out bool cancelled, string placeholderInputText = "Name your new GridData", string confirmButtonText = "Confirm", string cancelButtonText = "Cancel" )
     {
 
         string userInput = string.Empty;
         int inputRows = 0, inputCols = 0, inputCellSize = 0;
+        bool isCancelled = false;
 
         EditorInputPopupWindow window = GetWindow<EditorInputPopupWindow>( title );
 
@@ -347,6 +351,7 @@ public class EditorInputPopupWindow : EditorWindow
             inputRows = 0;
             inputCols = 0;
             inputCellSize = 0;
+            isCancelled = true;
             window.Close();
         } )
         {
@@ -371,7 +376,7 @@ public class EditorInputPopupWindow : EditorWindow
                 inputRows = 0;
                 inputCols = 0;
                 inputCellSize = 0;
-
+                isCancelled = true;
                 window.Close();
 
             }
@@ -383,7 +388,6 @@ public class EditorInputPopupWindow : EditorWindow
                 inputRows = rowsInputField.value;
                 inputCols = colsInputField.value;
                 inputCellSize = cellSizeInputField.value;
-
                 window.Close();
 
             }
@@ -403,6 +407,7 @@ public class EditorInputPopupWindow : EditorWindow
         rows = inputRows;
         cols = inputCols;
         cellSize = inputCellSize;
+        cancelled = isCancelled;
 
     }
 
@@ -530,6 +535,40 @@ public class GridDataEditor : Editor
 
         }
 
+        List<int> indicesToDelete = new();
+
+        if ( _enemyWaypointsProperty.arraySize > 0 )
+        {
+
+            var waypoints = _enemyWaypointsProperty.GetArrayElementAtIndex( 0 );
+
+            int index = 0;
+
+            do
+            {
+
+                var curr = waypoints.vector2IntValue;
+
+                if ( curr.x >= _columnsProperty.intValue || curr.y >= _rowsProperty.intValue )
+                {
+
+                    if ( _enemyWaypointsListView.viewController.itemsSource != null && _enemyWaypointsListView.viewController.itemsSource.Contains( curr ) )
+                        _enemyWaypointsListView.viewController.itemsSource.Remove( curr );
+
+                    indicesToDelete.Add( index );
+
+                }
+
+                index++;
+
+
+            } while ( waypoints.Next( false ) );
+
+            foreach ( int idx in indicesToDelete )
+                _enemyWaypointsProperty.DeleteArrayElementAtIndex( idx );
+
+        }
+
         serializedObject.ApplyModifiedProperties();
 
         for ( int i = 0; i < _gridProperty.arraySize; i++ )
@@ -618,7 +657,7 @@ public class GridDataEditor : Editor
 
         _enemyWaypointsListView = new ListView()
         {
-
+            name = "Waypoints-ListView",
             makeItem = () => new Label(),
             bindItem = ( item, idx ) => { var label = ( item as Label ); label.text = _enemyWaypointsProperty.GetArrayElementAtIndex( idx ).vector2IntValue.ToString(); label.style.fontSize = 24; label.style.alignItems = Align.Center; },
             selectionType = SelectionType.Single,
@@ -736,7 +775,6 @@ public class GridDataEditor : Editor
                 editorList.Children().ElementAt( 1 ).style.flexGrow = 1;
                 SetBoxModelValuesToSame( _contentContainer.Q<InspectorElement>(), 10, 0, 5 );
                 button.StretchToParentSize();
-
 
             }
 
@@ -887,8 +925,6 @@ public class GridDataEditor : Editor
         var cell = serializedObject.FindProperty( cellField.bindingPath );
 
         Vector2Int cellXY = new( cell.FindPropertyRelative( "_x" ).intValue, cell.FindPropertyRelative( "_y" ).intValue );
-
-        var cellParentContainer = cellField.Q<VisualElement>( name: "Cell-Parent-Container" );
 
         if ( _enemyWaypointsProperty.arraySize > 0 )
         {
