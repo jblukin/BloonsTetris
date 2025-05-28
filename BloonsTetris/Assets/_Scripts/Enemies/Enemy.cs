@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 
-[RequireComponent( typeof( CircleCollider2D ) )]
+[RequireComponent( typeof( CircleCollider2D ) ), RequireComponent( typeof( Rigidbody2D ) ), DisallowMultipleComponent]
 public abstract class Enemy : MonoBehaviour
 {
 
@@ -17,43 +17,67 @@ public abstract class Enemy : MonoBehaviour
         Silenced = 4,
         Weakened = 8,
         Primed = 16,
-        Burn = 32,
+        Burnt = 32,
         Poisoned = 64,
         Infested = 128,
         Shielded = 256,
-        Slowed = 512
+        Slowed = 512,
+        All = Marked | Cursed | Silenced | Weakened | Primed | Burnt | Poisoned | Infested | Shielded | Slowed
 
     }
 
-    protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue, _slowedPercentage, _pathTraversedPercentage;
+    protected float _maxHP, _currentHP, _power, _speed, _range, _abilityCooldown, _abilityDuration, _deathExplosionRadius, _deathExplosionPower, _poisonDoTValue, _fireDoTValue, _slowedPercentage, _pathTraversedPercentage, _distanceBetweenPrevCurrWaypoint;
     protected int _currentWaypointIdx;
-    protected ElementalTypes _elementalTypes;
-    protected ElementalResistances _elementalResistances;
-    protected StatusEffects _statusEffects;
+    protected ElementalTypes _elementalTypes, _baseElementalTypes;
+    protected ElementalResistances _elementalResistances, _baseElementalResistences;
+    protected StatusEffects _statusEffects, _baseStatusEffects;
     protected Coroutine _poisonDoTAction, _fireDoTAction, _abilityAction;
-    protected List<GameObject> _receivingObjects;
+    protected HashSet<GameObject> _receivingObjects;
     protected List<Vector2> _pathWaypoints;
+    public abstract float PathTraversedPercetange { get; }
 
-    public abstract void Init( BasicEnemyData enemyData );
+    protected abstract void Update();
 
-    public abstract void ReceiveAbility( float amountReceived, ElementalTypes elementalTypes, bool isPercentage = false, bool isHealing = false );
+    public abstract void Init( EnemyData enemyData );
+
+    public abstract void ReceiveDamageOrHealth( float amountReceived, bool isPercentage = false, bool isHealing = false );
+
+    public abstract void ApplyElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 );
+
+    public abstract void ApplyElementalResistances( ElementalResistances elementalResistances );
 
     protected abstract void Move();
 
-    protected abstract float CalculateFinalReceivedDamage( float damageReceived, ElementalTypes elementalTypes = 0 );
+    protected abstract float CalculateFinalReceivedDamage( float damageReceived, bool isPercentage = false, ElementalTypes elementalTypes = 0 );
 
-    protected abstract float CalculateFinalReceivedHealth( float healthReceived, ElementalTypes elementalTypes = 0 );
-
-    protected abstract void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 );
+    protected abstract float CalculateFinalReceivedHealth( float healthReceived, bool isPercentage = false, ElementalTypes elementalTypes = 0 );
 
     protected abstract IEnumerator ProcessDamageOverTime( float tickRate, bool isFire );
 
     protected abstract IEnumerator UseAbility();
 
-    public abstract void ClearStatusEffects( StatusEffects statusEffectsToClear );
+    protected abstract void OnTriggerEnter2D( Collider2D collidingObject );
+
+    protected abstract void OnTriggerExit2D( Collider2D collidingObject );
+
+    public abstract void ClearStatusEffects( StatusEffects statusEffectsToClear = StatusEffects.All );
+
+    public abstract void ClearResistences( ElementalResistances elementalResistances = ElementalResistances.All );
 
     protected abstract void OnDeath( bool deathByFire = false );
 
     protected abstract void Explode();
+
+}
+
+public class PathTravelledComparer : IComparer<Enemy>
+{
+
+    public int Compare( Enemy x, Enemy y )
+    {
+
+        return y.PathTraversedPercetange.CompareTo( x.PathTraversedPercetange );
+
+    }
 
 }

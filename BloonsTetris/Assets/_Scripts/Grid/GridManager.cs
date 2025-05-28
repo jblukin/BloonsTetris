@@ -19,15 +19,10 @@ public class GridManager : MonoBehaviour
     public int Columns { get { return _columns; } }
     public int CellSize { get { return _cellSize; } }
 
-    [Obsolete]
-    private Cell[,] _grid;
-    [Obsolete]
-    public Cell[,] Grid { get { return _grid; } }
-
     [SerializeField]
     private List<GridData> _premadeGridData;
 
-    private Cell[] _editorGrid;
+    private Cell[] _grid;
 
     private List<Vector2> _enemyPathWaypoints;
     public List<Vector2> EnemyPathWaypoints { get { return _enemyPathWaypoints; } }
@@ -73,7 +68,7 @@ public class GridManager : MonoBehaviour
     public Cell GetGridCell( int x, int y )
     {
 
-        return _editorGrid[ x + y * _columns ];
+        return _grid[ x + y * _columns ];
 
     }
 
@@ -82,7 +77,7 @@ public class GridManager : MonoBehaviour
 
         GridData gridData = _premadeGridData.Count > 0 ? _premadeGridData[ Random.Range( 0, _premadeGridData.Count ) ] : GenerateNewGrid( rows, columns );
 
-        _editorGrid = gridData.Grid;
+        _grid = gridData.Grid;
         _rows = gridData.Rows;
         _columns = gridData.Columns;
         _cellSize = gridData.CellSize;
@@ -111,7 +106,7 @@ public class GridManager : MonoBehaviour
     private void DrawGrid()
     {
 
-        foreach( var cell in _editorGrid )
+        foreach( var cell in _grid )
         {
 
             if ( cell.State is not Cell.CellState.Path )
@@ -119,13 +114,15 @@ public class GridManager : MonoBehaviour
 
             var pathSprite = new GameObject("Pathing");
 
+            pathSprite.transform.SetParent( GameManager.Instance.transform, true );
+
             pathSprite.transform.localScale *= _cellSize;
 
             pathSprite.transform.position = cell.CellCenterToWorldSpace();
 
-            pathSprite.AddComponent<SpriteRenderer>();
+            SpriteRenderer r = pathSprite.AddComponent<SpriteRenderer>();
 
-            pathSprite.GetComponent<SpriteRenderer>().sprite = _pathSprite;
+            r.sprite = _pathSprite;
 
         }
 
@@ -157,45 +154,6 @@ public class GridManager : MonoBehaviour
 
         return gridData;
 
-
-    }
-
-    [Obsolete]
-    public void GenerateBasicGrid( int rows, int cols )
-    {
-
-        _grid = new Cell[ rows, cols ];
-
-        int count = 0;
-
-        for ( int i = 0; i < rows; i++ )
-        {
-
-            for ( int j = 0; j < cols; j++ )
-            {
-
-                _grid[ i, j ] = new Cell( i, j, _cellSize, Cell.CellState.Empty, CreateWorldText( $"{count++}", GameManager.Instance.transform, new Vector3( i + 0.5f, j + 0.5f ) * _cellSize, 200 ) );
-
-                if ( !_debugText )
-                    _grid[ i, j ].SetTextMeshColor( Color.clear );
-
-            }
-
-        }
-
-        for ( int i = 0; i <= _rows; i++ )
-        {
-
-            Debug.DrawLine( new Vector3( 0, i, 10 ) * _cellSize, new Vector3( _columns, i, 10 ) * _cellSize, Color.white, 1000 );
-
-        }
-
-        for ( int i = 0; i <= _columns; i++ )
-        {
-
-            Debug.DrawLine( new Vector3( i, 0, 10 ) * _cellSize, new Vector3( i, _rows, 10 ) * _cellSize, Color.white, 1000 );
-
-        }
 
     }
 
@@ -233,7 +191,7 @@ public class GridManager : MonoBehaviour
 
         _debugHighlight = _debugText = !_debugText;
 
-        foreach ( Cell c in _editorGrid )
+        foreach ( Cell c in _grid )
         {
 
             c.SetTextMeshColor( _debugText ? Color.white : Color.clear );

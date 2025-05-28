@@ -427,8 +427,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df3ca937366356546a05602204ac7fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _basicEnemyDataObjs:
+  _enemyDataObjs:
   - {fileID: 11400000, guid: fce1a59a176670743ae20fa219255ad0, type: 2}
+  - {fileID: 11400000, guid: 4f05d169ee94bda408813123f6664e39, type: 2}
   _enemySprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

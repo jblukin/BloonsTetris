@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class BaseEnemy : Enemy
 {
+    public override float PathTraversedPercetange => _pathTraversedPercentage;
 
     private bool onInit = false;
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
 
         if ( !onInit )
@@ -26,7 +27,7 @@ public class BaseEnemy : Enemy
 
     }
 
-    public override void Init( BasicEnemyData enemyData )
+    public override void Init( EnemyData enemyData )
     {
 
         onInit = true;
@@ -35,9 +36,9 @@ public class BaseEnemy : Enemy
         _power = enemyData.Power;
         _speed = enemyData.Speed;
         _range = enemyData.Range;
-        _elementalTypes = enemyData.ElementalTypes;
-        _elementalResistances = enemyData.ElementalResistances;
-        _statusEffects = enemyData.BaseStatusEffects;
+        _elementalTypes = _baseElementalTypes = enemyData.ElementalTypes;
+        _elementalResistances = _baseElementalResistences = enemyData.ElementalResistances;
+        _statusEffects = _baseStatusEffects = enemyData.BaseStatusEffects;
         _deathExplosionPower = enemyData.DeathExplosionPower;
         _deathExplosionRadius = enemyData.DeathExplosionRadius;
         _pathWaypoints = GameManager.Instance.GridManager.EnemyPathWaypoints;
@@ -45,17 +46,43 @@ public class BaseEnemy : Enemy
         _currentWaypointIdx = 1;
         _pathTraversedPercentage = _poisonDoTValue = _fireDoTValue = 0;
 
+        _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
+
         if ( enemyData.HasAbility )
+        {
+
+            _receivingObjects = new();
+
+            GameObject rangeDetector = new();
+
+            rangeDetector.transform.SetParent( transform, false );
+
+            rangeDetector.transform.localPosition = Vector2.zero;
+
+            CircleCollider2D rangeCollider = rangeDetector.AddComponent<CircleCollider2D>();
+
+            rangeCollider.isTrigger = true;
+
+            rangeCollider.radius = _range * 0.5f;
+
             _abilityAction = StartCoroutine( UseAbility() );
+
+        }
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
+        rb.gravityScale = 0;
 
         gameObject.layer = LayerMask.NameToLayer( "Enemy" );
 
     }
 
-    public override void ReceiveAbility( float amountReceived, ElementalTypes elementalTypes, bool isPercentage = false, bool isHealing = false )
+    public override void ReceiveDamageOrHealth( float amountReceived, bool isPercentage = false, bool isHealing = false )
     {
 
-        if ( amountReceived > 0 && !isPercentage )
+        if ( amountReceived > 0 )
         {
 
             if ( isHealing )
@@ -69,7 +96,7 @@ public class BaseEnemy : Enemy
                 if ( _currentHP <= 0 )
                 {
 
-                    OnDeath( _statusEffects.HasFlag( StatusEffects.Burn ) );
+                    OnDeath( _statusEffects.HasFlag( StatusEffects.Burnt ) );
                     return;
 
                 }
@@ -78,25 +105,76 @@ public class BaseEnemy : Enemy
 
         }
 
-        if ( elementalTypes is not 0 )
-            ProcessElementalEffects( elementalTypes, 0, isPercentage ? amountReceived * 0.01f : 0 );
+    }
+
+    public override void ApplyElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 )
+    {
+
+        if ( elementalTypes.HasFlag( ElementalTypes.Fire ) )
+        {
+
+            _fireDoTValue += doTValueIncrement;
+
+            _fireDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, true ) );
+
+            _statusEffects |= StatusEffects.Burnt;
+
+        }
+
+        if ( elementalTypes.HasFlag( ElementalTypes.Poison ) )
+        {
+
+            _poisonDoTValue += doTValueIncrement;
+
+            _poisonDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, false ) );
+
+            _statusEffects |= StatusEffects.Poisoned;
+
+        }
+
+
+        if ( elementalTypes.HasFlag( ElementalTypes.Lightning ) )
+        {
+
+            _statusEffects |= StatusEffects.Marked;
+
+        }
+
+        if ( elementalTypes.HasFlag( ElementalTypes.Ice ) )
+        {
+
+            _slowedPercentage = Mathf.Max( _slowedPercentage, incomingSlowPercentage );
+
+            _statusEffects |= StatusEffects.Slowed;
+
+        }
+
+    }
+
+    public override void ApplyElementalResistances( ElementalResistances elementalResistances )
+    {
+
+        _elementalResistances |= elementalResistances;
 
     }
 
     protected override void Move()
     {
 
-        //Calculate Path Traversed Percentage
-        //_pathTraversedPercentage = ((float)_currentWaypointIdx / _pathWaypoints.Count) + ();
-
-        float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - ( _slowedPercentage ) ) : _speed;
+        float finalSpeed = _statusEffects.HasFlag( StatusEffects.Slowed ) ? _speed * ( 1 - _slowedPercentage ) : _speed;
 
         finalSpeed *= Time.deltaTime;
 
-        if ( Vector2.Distance( transform.position, _pathWaypoints[ _currentWaypointIdx ] ) < finalSpeed )
+        float distanceToCurrentWaypoint = Vector2.Distance( transform.position, _pathWaypoints[ _currentWaypointIdx ] );
+
+        float distanceFromPrevWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], transform.position );
+
+        if ( distanceToCurrentWaypoint < finalSpeed )
         {
 
             _currentWaypointIdx++;
+
+            _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
 
             if ( _currentWaypointIdx == _pathWaypoints.Count )
             {
@@ -109,22 +187,26 @@ public class BaseEnemy : Enemy
 
         }
 
+        _pathTraversedPercentage = _currentWaypointIdx + ( distanceFromPrevWaypoint / _distanceBetweenPrevCurrWaypoint );
+
         Vector2 dir = _pathWaypoints[ _currentWaypointIdx ] - new Vector2( transform.position.x, transform.position.y );
 
         dir.Normalize();
 
         transform.Translate( finalSpeed * dir );
 
+        //Debug.Log( $"{name}: {_pathTraversedPercentage}" );
+
     }
 
-    protected override float CalculateFinalReceivedDamage( float damageReceived, ElementalTypes elementalTypes = 0 )
+    protected override float CalculateFinalReceivedDamage( float damageReceived, bool isPercentage = false, ElementalTypes elementalTypes = 0 )
     {
 
         if ( _elementalResistances is 0 ||
             ( !elementalTypes.HasFlag( ElementalTypes.Fire ) &&
             !elementalTypes.HasFlag( ElementalTypes.Poison ) &&
             !elementalTypes.HasFlag( ElementalTypes.Physical ) ) )
-            return damageReceived;
+            return isPercentage ? _maxHP * ( damageReceived * 0.01f ) : damageReceived;
 
         else
         {
@@ -145,16 +227,16 @@ public class BaseEnemy : Enemy
                 damageReceived *= 0.7f;
 
 
-            return damageReceived;
+            return isPercentage ? _maxHP * ( damageReceived * 0.01f ) : damageReceived;
 
         }
 
     }
 
-    protected override float CalculateFinalReceivedHealth( float healthReceived, ElementalTypes elementalTypes = 0 )
+    protected override float CalculateFinalReceivedHealth( float healthReceived, bool isPercentage = false, ElementalTypes elementalTypes = 0 )
     {
 
-        return healthReceived;
+        return isPercentage ? _maxHP * ( healthReceived * 0.01f ) : healthReceived;
 
     }
 
@@ -227,70 +309,61 @@ public class BaseEnemy : Enemy
 
     }
 
-    protected override void ProcessElementalEffects( ElementalTypes elementalTypes, float doTValueIncrement = 0, float incomingSlowPercentage = 0 )
-    {
-
-        if ( elementalTypes.HasFlag( ElementalTypes.Fire ) )
-        {
-
-            _fireDoTValue += doTValueIncrement;
-
-            _fireDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, true ) );
-
-            _statusEffects |= StatusEffects.Burn;
-
-        }
-
-        if ( elementalTypes.HasFlag( ElementalTypes.Poison ) )
-        {
-
-            _poisonDoTValue += doTValueIncrement;
-
-            _poisonDoTAction ??= StartCoroutine( ProcessDamageOverTime( 5f, false ) );
-
-            _statusEffects |= StatusEffects.Poisoned;
-
-        }
-
-
-        if ( elementalTypes.HasFlag( ElementalTypes.Lightning ) )
-        {
-
-            _statusEffects |= StatusEffects.Marked;
-
-        }
-
-        if ( elementalTypes.HasFlag( ElementalTypes.Ice ) )
-        {
-
-            _slowedPercentage = Mathf.Max( _slowedPercentage, incomingSlowPercentage );
-
-            _statusEffects |= StatusEffects.Slowed;
-
-        }
-
-    }
-
     protected override IEnumerator UseAbility()
     {
 
-        while ( true )
-        {
+        yield return null;
 
-            //Uncomment if ability has a range
-            //yield return new WaitUntil(() => _receivingObjects.Count > 0);
+        //Copy this part for enemies with abiltiies
+        //while ( true )
+        //{
 
-            Debug.Log( $"Enemy of type: {GetType()} used ability" );
-            yield return new WaitForSeconds( _abilityCooldown );
+        //    //Uncomment if ability has a range
+        //    //yield return new WaitUntil(() => _receivingObjects.Count > 0);
 
-        }
+        //    Debug.Log( $"Enemy of type: {GetType()} used ability" );
+        //    yield return new WaitForSeconds( _abilityCooldown );
+
+        //}
 
     }
 
-    public override void ClearStatusEffects( StatusEffects statusEffectsToClear )
+    protected override void OnTriggerEnter2D( Collider2D collidingObject )
+    {
+
+        //Override with this if enemy has ability
+        //if ( collidingObject.TryGetComponent</* Type of Object That will be receiving the abilty effect from this Enemy */>( out var receivingObject ) )
+        //{
+
+        //    _receivingObjects.Add( collidingObject.gameObject );
+
+        //    //Apply any effects to receivingObject here
+
+        //}
+
+    }
+
+    protected override void OnTriggerExit2D( Collider2D collidingObject )
+    {
+
+        //Override with this if enemy has ability
+        //if ( collidingObject.TryGetComponent</* Type of Object That will be receiving the abilty effect from this Enemy */>( out var receivingObject ) )
+        //{
+
+        //    _receivingObjects.Remove( collidingObject.gameObject );
+
+        //    //Remove any applied effects from receivingObject here
+
+        //}
+
+    }
+
+    public override void ClearStatusEffects( StatusEffects statusEffectsToClear = StatusEffects.All )
     {
 
         _statusEffects &= ~statusEffectsToClear;
+
+        _statusEffects |= _baseStatusEffects;
 
         if ( statusEffectsToClear.HasFlag( StatusEffects.Slowed ) )
         {
@@ -299,6 +372,15 @@ public class BaseEnemy : Enemy
 
         }
 
+
+    }
+
+    public override void ClearResistences( ElementalResistances elementalResistances = ElementalResistances.All )
+    {
+        
+        _elementalResistances &= ~elementalResistances;
+
+        _elementalResistances |= _baseElementalResistences;
 
     }
 
@@ -313,7 +395,8 @@ public class BaseEnemy : Enemy
             if ( collider.TryGetComponent<Enemy>( out var enemy ) )
             {
 
-                enemy.ReceiveAbility( _deathExplosionPower, ElementalTypes.Fire );
+                enemy.ReceiveDamageOrHealth( _deathExplosionPower );
+                enemy.ApplyElementalEffects( ElementalTypes.Fire );
 
             }
 

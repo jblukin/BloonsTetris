@@ -139,7 +139,8 @@ public enum ElementalTypes
     Ice = 2,
     Poison = 4,
     Lightning = 8,
-    Fire = 16
+    Fire = 16,
+    All = Physical | Ice | Poison | Lightning | Fire
 
 }
 
@@ -156,7 +157,11 @@ public enum ElementalResistances
     PoisonHigh = 32,
     FireLow = 64,
     FireMedium = 128,
-    FireHigh = 256
+    FireHigh = 256,
+    LowTypes = PhysicalLow | PoisonLow | FireLow,
+    MediumTypes = PhysicalMedium | PoisonMedium | FireMedium,
+    HighTypes = PhysicalHigh | PoisonHigh | FireHigh,
+    All = LowTypes | MediumTypes | HighTypes
 
 }
 

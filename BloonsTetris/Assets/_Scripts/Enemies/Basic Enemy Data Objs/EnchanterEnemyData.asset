@@ -10,16 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
-  m_Name: BaseEnemyData
+  m_Name: EnchanterEnemyData
   m_EditorClassIdentifier: 
-  MaxHP: 100
-  Power: 0
-  Speed: 50
-  Range: 0
-  AbilityCooldown: 0
+  MaxHP: 150
+  Power: 30
+  Speed: 40
+  Range: 8
+  AbilityCooldown: 2
+  AbilityDuration: 4
   DeathExplosionRadius: 0
   DeathExplosionPower: 0
-  HasAbility: 0
+  HasAbility: 1
   ElementalTypes: 0
-  ElementalResistances: 0
+  ElementalResistances: 73
   BaseStatusEffects: 0

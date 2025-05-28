@@ -13,7 +13,9 @@ public class EnemyManagerEditor : Editor
 
         InspectorElement.FillDefaultInspector( inspector, serializedObject, this );
 
-        inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy(); } ) { text = "Spawn Base Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 10 } } );
+        inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy( typeof( BaseEnemy ) ); } ) { text = "Spawn Base Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 10 } } );
+
+        inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy( typeof( EnchanterEnemy ) ); } ) { text = "Spawn Enchanter Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
 
         return inspector;
 

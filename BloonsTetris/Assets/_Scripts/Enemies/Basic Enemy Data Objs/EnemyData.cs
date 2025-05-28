@@ -1,10 +1,10 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "Scriptable Objects/EnemyData")]
-public class BasicEnemyData : ScriptableObject
+public class EnemyData : ScriptableObject
 {
 
-    public float MaxHP, Power, Speed, Range, AbilityCooldown, DeathExplosionRadius, DeathExplosionPower;
+    public float MaxHP, Power, Speed, Range, AbilityCooldown, AbilityDuration, DeathExplosionRadius, DeathExplosionPower;
 
     public bool HasAbility;
 

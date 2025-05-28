@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -34,7 +35,23 @@ public class Tetrimino : MonoBehaviour
 
     private Coroutine _abilityAction;
 
-    private List<GameObject> _enemiesInRange;
+    private SortedSet<Enemy> _enemiesInRange;
+
+    private void Update()
+    {
+
+        StringBuilder stringBuilder = new();
+
+        foreach ( Enemy enemy in _enemiesInRange )
+        {
+
+            stringBuilder.AppendLine( $"{enemy.gameObject.name}({enemy.GetComponent<SpriteRenderer>().color}): {enemy.PathTraversedPercetange}" );
+
+        }
+
+        if(stringBuilder.Length > 0) Debug.Log( stringBuilder.ToString() );
+
+    }
 
     #region Init and Operation Functions
     public void Init( DefaultTetrimino shapeData )
@@ -52,7 +69,7 @@ public class Tetrimino : MonoBehaviour
 
         _currentLocalCells = new List<Vector2>();
 
-        _enemiesInRange = new List<GameObject>();
+        _enemiesInRange = new SortedSet<Enemy>( new PathTravelledComparer() );
 
         SubscribeInputs();
 
@@ -250,8 +267,8 @@ public class Tetrimino : MonoBehaviour
     public void OnTriggerEnter2D( Collider2D collidingObject )
     {
 
-        if ( collidingObject.GetComponent<Enemy>() != null )
-            _enemiesInRange.Add( collidingObject.gameObject );
+        if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
+            _enemiesInRange.Add( enemy );
 
     }
 
@@ -261,7 +278,7 @@ public class Tetrimino : MonoBehaviour
         if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
         {
 
-            _enemiesInRange.Remove( collidingObject.gameObject );
+            _enemiesInRange.Remove( enemy );
 
             if ( _baseShape is DefaultShape.Square )
             {
@@ -435,10 +452,10 @@ public class Tetrimino : MonoBehaviour
             //Perform Ability Here
             Debug.Log( "Square Used" );
 
-            foreach ( GameObject enemy in _enemiesInRange )
+            foreach ( Enemy enemy in _enemiesInRange )
             {
 
-                enemy.GetComponent<Enemy>().ReceiveAbility( _power, _elementalTypes, true );
+                enemy.ApplyElementalEffects( _elementalTypes );
 
             }
 
