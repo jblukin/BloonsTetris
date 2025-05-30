@@ -124,6 +124,8 @@ public class GridManager : MonoBehaviour
 
             r.sprite = _pathSprite;
 
+            r.sortingOrder = -1;
+
         }
 
 

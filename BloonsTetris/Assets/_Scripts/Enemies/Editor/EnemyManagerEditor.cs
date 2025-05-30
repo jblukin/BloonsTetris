@@ -17,6 +17,8 @@ public class EnemyManagerEditor : Editor
 
         inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy( typeof( EnchanterEnemy ) ); } ) { text = "Spawn Enchanter Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
 
+        inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy( typeof( DisablerEnemy ) ); } ) { text = "Spawn Disabler Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
+
         return inspector;
 
     }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
-  m_Name: EnchanterEnemyData
+  m_Name: DisablerEnemyData
   m_EditorClassIdentifier: 
-  MaxHP: 150
-  Power: 30
-  Speed: 60
-  Range: 8
-  AbilityCooldown: 2
-  AbilityDuration: 4
-  DeathExplosionRadius: 3
-  DeathExplosionPower: 15
+  MaxHP: 100
+  Power: 0
+  Speed: 50
+  Range: 6
+  AbilityCooldown: 4
+  AbilityDuration: 0
+  DeathExplosionRadius: 2
+  DeathExplosionPower: 10
   HasAbility: 1
   ElementalTypes: 0
-  ElementalResistances: 73
+  ElementalResistances: 0
   BaseStatusEffects: 0

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,22 +36,6 @@ public class Tetrimino : MonoBehaviour
 
     private SortedSet<Enemy> _enemiesInRange;
 
-    private void Update()
-    {
-
-        StringBuilder stringBuilder = new();
-
-        foreach ( Enemy enemy in _enemiesInRange )
-        {
-
-            stringBuilder.AppendLine( $"{enemy.gameObject.name}({enemy.GetComponent<SpriteRenderer>().color}): {enemy.PathTraversedPercetange}" );
-
-        }
-
-        if(stringBuilder.Length > 0) Debug.Log( stringBuilder.ToString() );
-
-    }
-
     #region Init and Operation Functions
     public void Init( DefaultTetrimino shapeData )
     {
@@ -86,6 +69,8 @@ public class Tetrimino : MonoBehaviour
         rangeCollider.isTrigger = true;
 
         rangeCollider.radius = _range * 0.5f;
+
+        rangeCollider.callbackLayers = rangeCollider.contactCaptureLayers = LayerMask.GetMask( "Enemy", "TetriminoBase" );
 
         _abilityAction = InitializeAbility();
 
@@ -264,7 +249,7 @@ public class Tetrimino : MonoBehaviour
 
     }
 
-    public void OnTriggerEnter2D( Collider2D collidingObject )
+    private void OnTriggerEnter2D( Collider2D collidingObject )
     {
 
         if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
@@ -272,7 +257,7 @@ public class Tetrimino : MonoBehaviour
 
     }
 
-    public void OnTriggerExit2D( Collider2D collidingObject )
+    private void OnTriggerExit2D( Collider2D collidingObject )
     {
 
         if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
@@ -280,17 +265,21 @@ public class Tetrimino : MonoBehaviour
 
             _enemiesInRange.Remove( enemy );
 
-            if ( _baseShape is DefaultShape.Square )
+            switch ( _baseShape )
             {
 
-                enemy.ClearStatusEffects( Enemy.StatusEffects.Slowed );
+                case DefaultShape.Square:
+                    {
+                        enemy.ClearStatusEffects( Enemy.StatusEffects.Slowed );
+                        break;
+                    }
 
             }
 
         }
-
     }
     #endregion
+
 
     #region Ability Functions
     private Coroutine InitializeAbility()
@@ -310,7 +299,50 @@ public class Tetrimino : MonoBehaviour
 
         return StartCoroutine( ability );
 
+    }
 
+    public void DisableAbility()
+    {
+
+        StopCoroutine( _abilityAction );
+
+        foreach ( var enemy in _enemiesInRange )
+        {
+
+            switch ( _baseShape )
+            {
+
+                case DefaultShape.Square:
+                    {
+                        enemy.ClearStatusEffects( Enemy.StatusEffects.Slowed );
+                        break;
+                    }
+
+
+            }
+
+        }
+
+    }
+
+    public void EnableAbility()
+    {
+
+        _abilityAction = InitializeAbility();
+
+        foreach ( var enemy in _enemiesInRange )
+        {
+            switch ( _baseShape )
+            {
+
+                case DefaultShape.Square:
+                    {
+                        enemy.ApplyElementalEffects( _elementalTypes, 0, _power );
+                        break;
+                    }
+
+            }
+        }
     }
 
     private IEnumerator Use_L_Ability()
@@ -455,7 +487,7 @@ public class Tetrimino : MonoBehaviour
             foreach ( Enemy enemy in _enemiesInRange )
             {
 
-                enemy.ApplyElementalEffects( _elementalTypes );
+                enemy.ApplyElementalEffects( _elementalTypes, 0, _power );
 
             }
 

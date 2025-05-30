@@ -34,6 +34,7 @@ public abstract class Enemy : MonoBehaviour
     protected Coroutine _poisonDoTAction, _fireDoTAction, _abilityAction;
     protected HashSet<GameObject> _receivingObjects;
     protected List<Vector2> _pathWaypoints;
+    protected CircleCollider2D _rangeCollider;
     public abstract float PathTraversedPercetange { get; }
 
     protected abstract void Update();

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq.Expressions;
 using UnityEngine;
 
 public class BaseEnemy : Enemy
@@ -36,6 +37,8 @@ public class BaseEnemy : Enemy
         _power = enemyData.Power;
         _speed = enemyData.Speed;
         _range = enemyData.Range;
+        _abilityCooldown = enemyData.AbilityCooldown;
+        _abilityDuration = enemyData.AbilityDuration;
         _elementalTypes = _baseElementalTypes = enemyData.ElementalTypes;
         _elementalResistances = _baseElementalResistences = enemyData.ElementalResistances;
         _statusEffects = _baseStatusEffects = enemyData.BaseStatusEffects;
@@ -59,15 +62,25 @@ public class BaseEnemy : Enemy
 
             rangeDetector.transform.localPosition = Vector2.zero;
 
-            CircleCollider2D rangeCollider = rangeDetector.AddComponent<CircleCollider2D>();
+            _rangeCollider = rangeDetector.AddComponent<CircleCollider2D>();
 
-            rangeCollider.isTrigger = true;
+            _rangeCollider.isTrigger = true;
 
-            rangeCollider.radius = _range * 0.5f;
+            _rangeCollider.radius = _range * 0.5f;
 
-            _abilityAction = StartCoroutine( UseAbility() );
+            _rangeCollider.callbackLayers = _rangeCollider.contactCaptureLayers = LayerMask.GetMask( "Enemy", "TetriminoBase" );
+
+            _abilityAction = StartCoroutine( nameof( UseAbility ) );
 
         }
+
+        CircleCollider2D c = GetComponent<CircleCollider2D>();
+
+        c.isTrigger = true;
+
+        c.contactCaptureLayers = LayerMask.GetMask( "Default" );
+
+        c.callbackLayers = LayerMask.GetMask( "Nothing" );
 
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
@@ -143,7 +156,7 @@ public class BaseEnemy : Enemy
         if ( elementalTypes.HasFlag( ElementalTypes.Ice ) )
         {
 
-            _slowedPercentage = Mathf.Max( _slowedPercentage, incomingSlowPercentage );
+            _slowedPercentage = Mathf.Max( _slowedPercentage, incomingSlowPercentage * 0.01f );
 
             _statusEffects |= StatusEffects.Slowed;
 
@@ -169,14 +182,12 @@ public class BaseEnemy : Enemy
 
         float distanceFromPrevWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], transform.position );
 
-        if ( distanceToCurrentWaypoint < finalSpeed )
+        if ( distanceToCurrentWaypoint <= finalSpeed )
         {
 
             _currentWaypointIdx++;
 
-            _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
-
-            if ( _currentWaypointIdx == _pathWaypoints.Count )
+            if ( _currentWaypointIdx >= _pathWaypoints.Count )
             {
 
                 Destroy( gameObject );
@@ -184,6 +195,8 @@ public class BaseEnemy : Enemy
                 return;
 
             }
+
+            _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );  
 
         }
 
@@ -377,7 +390,7 @@ public class BaseEnemy : Enemy
 
     public override void ClearResistences( ElementalResistances elementalResistances = ElementalResistances.All )
     {
-        
+
         _elementalResistances &= ~elementalResistances;
 
         _elementalResistances |= _baseElementalResistences;

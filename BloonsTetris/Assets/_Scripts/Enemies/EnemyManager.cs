@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,8 +26,6 @@ public class EnemyManager : MonoBehaviour
     public void SpawnEnemy( Type enemyType )
     {
 
-        Debug.Log( enemyType.ToString() );
-
         if ( _enemyDataObjs.Count == 0 )
             return;
 
@@ -37,10 +35,14 @@ public class EnemyManager : MonoBehaviour
 
         r.sprite = _enemySprite;
 
+        Enemy enemy = null;
+
         if ( enemyType == typeof( BaseEnemy ) )
         {
 
             r.color = Color.red;
+
+            enemy = gameObject.AddComponent<BaseEnemy>();
 
         }
         else if ( enemyType == typeof( EnchanterEnemy ) )
@@ -48,15 +50,26 @@ public class EnemyManager : MonoBehaviour
 
             r.color = Color.green;
 
+            enemy = gameObject.AddComponent<EnchanterEnemy>();
+
         }
+        else if ( enemyType == typeof( DisablerEnemy ) )
+        {
+
+            r.color = Color.blue;
+
+            enemy = gameObject.AddComponent<DisablerEnemy>();
+
+        }
+
+        if ( enemy == null )
+            throw new Exception( "Attempted to Spawn Invalid Enemy Type" );
 
         gameObject.transform.localScale = new Vector3( gameObject.transform.localScale.x, gameObject.transform.localScale.y, 1 / GameManager.Instance.GridManager.CellSize ) * GameManager.Instance.GridManager.CellSize;
 
-        gameObject.name = $"BaseEnemy{AllEnemies.Count + 1}";
+        gameObject.name = $"{enemyType.Name}{AllEnemies.Count + 1}";
 
         gameObject.transform.position = GameManager.Instance.GridManager.EnemyPathWaypoints[ 0 ];
-
-        Enemy enemy = gameObject.AddComponent( enemyType ) as Enemy;
 
         enemy.Init( Instantiate( _enemyDataObjs.Find( x => x.name.Contains( enemyType.Name ) ) ) );
 
