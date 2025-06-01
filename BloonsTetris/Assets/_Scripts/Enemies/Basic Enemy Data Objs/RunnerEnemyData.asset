@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
+  m_Name: RunnerEnemyData
+  m_EditorClassIdentifier: 
+  MaxHP: 200
+  Power: 15
+  Speed: 80
+  Range: 0
+  AbilityCooldown: 0
+  AbilityDuration: 0
+  DeathExplosionRadius: 7
+  DeathExplosionPower: 20
+  HasAbility: 0
+  ElementalTypes: 0
+  ElementalResistances: 0
+  BaseStatusEffects: 0

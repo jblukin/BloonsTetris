@@ -60,6 +60,13 @@ public class EnemyManager : MonoBehaviour
 
             enemy = gameObject.AddComponent<DisablerEnemy>();
 
+        } else if ( enemyType == typeof( RunnerEnemy ) )
+        {
+
+            r.color = Color.yellow;
+
+            enemy = gameObject.AddComponent<RunnerEnemy>();
+
         }
 
         if ( enemy == null )
