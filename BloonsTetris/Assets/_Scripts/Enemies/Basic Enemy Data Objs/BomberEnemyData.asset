@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
-  m_Name: BaseEnemyData
+  m_Name: BomberEnemyData
   m_EditorClassIdentifier: 
-  MaxHP: 50
-  Power: 0
-  Speed: 70
+  MaxHP: 120
+  Power: 20
+  Speed: 55
   Range: 0
   AbilityCooldown: 0
   AbilityDuration: 0
-  DeathExplosionRadius: 2
-  DeathExplosionPower: 10
+  DeathExplosionRadius: 10
+  DeathExplosionPower: 50
   HasAbility: 0
   ElementalTypes: 0
-  ElementalResistances: 0
+  ElementalResistances: 9
   BaseStatusEffects: 0

@@ -78,7 +78,7 @@ public class BaseEnemy : Enemy
 
         c.isTrigger = true;
 
-        c.contactCaptureLayers = LayerMask.GetMask( "Default" );
+        c.contactCaptureLayers = LayerMask.GetMask( "Default", "Enemy" );
 
         c.callbackLayers = LayerMask.GetMask( "Nothing" );
 
@@ -196,7 +196,7 @@ public class BaseEnemy : Enemy
 
             }
 
-            _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );  
+            _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
 
         }
 
@@ -400,7 +400,9 @@ public class BaseEnemy : Enemy
     protected override void Explode()
     {
 
-        Collider2D[] results = Physics2D.OverlapCircleAll( transform.position, _deathExplosionRadius, LayerMask.GetMask( "Enemy" ) );
+        gameObject.layer = LayerMask.NameToLayer( "Default" );
+
+        Collider2D[] results = Physics2D.OverlapCircleAll( transform.position, _deathExplosionRadius * GameManager.Instance.GridManager.CellSize * 0.5f, LayerMask.GetMask( "Enemy" ) );
 
         foreach ( var collider in results )
         {
@@ -408,8 +410,9 @@ public class BaseEnemy : Enemy
             if ( collider.TryGetComponent<Enemy>( out var enemy ) )
             {
 
-                enemy.ReceiveDamageOrHealth( _deathExplosionPower );
                 enemy.ApplyElementalEffects( ElementalTypes.Fire );
+                enemy.ReceiveDamageOrHealth( _deathExplosionPower );
+
 
             }
 
