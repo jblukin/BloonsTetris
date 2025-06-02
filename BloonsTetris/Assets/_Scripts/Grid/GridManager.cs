@@ -106,13 +106,13 @@ public class GridManager : MonoBehaviour
     private void DrawGrid()
     {
 
-        foreach( var cell in _grid )
+        foreach ( var cell in _grid )
         {
 
             if ( cell.State is not Cell.CellState.Path )
                 continue;
 
-            var pathSprite = new GameObject("Pathing");
+            var pathSprite = new GameObject( "Pathing" );
 
             pathSprite.transform.SetParent( GameManager.Instance.transform, true );
 

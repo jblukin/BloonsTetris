@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     public void SpawnTetriminoShape( DefaultShape shape )
     {
 
-        DefaultTetrimino baseShapeData = Instantiate(_defaultTetriminos.Find( x => x.Shape == shape ));
+        DefaultTetrimino baseShapeData = Instantiate( _defaultTetriminos.Find( x => x.Shape == shape ) );
 
         GameObject parentObj = new( $"{shape}" );
 

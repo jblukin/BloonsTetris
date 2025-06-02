@@ -14,7 +14,7 @@ public class RunnerEnemy : BaseEnemy
 
     protected override void Update()
     {
-        
+
         base.Update();
 
         ReceiveDamageOrHealth( 0.01f );

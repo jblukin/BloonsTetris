@@ -433,6 +433,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 76d38bda04e0ad84495a40a33c61964f, type: 2}
   - {fileID: 11400000, guid: 18e3d7bd15e0f9c4b99f1e78837bf40f, type: 2}
   - {fileID: 11400000, guid: 60cd4311b8d686f4e971dddab1a8787d, type: 2}
+  - {fileID: 11400000, guid: 3d5db80185a08b04cb592e7cb31d8045, type: 2}
   _enemySprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

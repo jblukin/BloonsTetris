@@ -77,9 +77,17 @@ public class EnemyManager : MonoBehaviour
             enemy = gameObject.AddComponent<BomberEnemy>();
 
         }
+        else if ( enemyType == typeof( ShielderEnemy ) )
+        {
+
+            r.color = Color.magenta;
+
+            enemy = gameObject.AddComponent<ShielderEnemy>();
+
+        }
 
         if ( enemy == null )
-            throw new Exception( "Attempted to Spawn Invalid Enemy Type" );
+            throw new Exception( "Attempted to Spawn Invalid Enemy Type (Enemy Type may not exist yet)" );
 
         gameObject.transform.localScale = new Vector3( gameObject.transform.localScale.x, gameObject.transform.localScale.y, 1 / GameManager.Instance.GridManager.CellSize ) * GameManager.Instance.GridManager.CellSize;
 
