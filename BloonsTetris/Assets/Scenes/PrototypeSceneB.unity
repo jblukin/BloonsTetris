@@ -435,6 +435,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 60cd4311b8d686f4e971dddab1a8787d, type: 2}
   - {fileID: 11400000, guid: 3d5db80185a08b04cb592e7cb31d8045, type: 2}
   - {fileID: 11400000, guid: 1de2f5e480bfa654fb728f06cfe4777c, type: 2}
+  - {fileID: 11400000, guid: 8c0c41a21a52b14489ec43ac5bee204b, type: 2}
   _enemySprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
   ReceivingObjectDestroyed:
     m_PersistentCalls:

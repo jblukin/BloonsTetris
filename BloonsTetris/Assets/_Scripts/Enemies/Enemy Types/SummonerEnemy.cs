@@ -14,7 +14,7 @@ public class SummonerEnemy : BaseEnemy
 
         _enemyManager = GameManager.Instance.EnemyManager;
 
-        _baseEnemyData = _enemyManager.EnemyDataObjs.Find( x => x.name.Contains( typeof( BaseEnemy ).Name ) );
+        _baseEnemyData = Instantiate( _enemyManager.EnemyDataObjs.Find( x => x.name.Contains( typeof( BaseEnemy ).Name ) ) );
 
     }
 

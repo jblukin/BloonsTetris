@@ -52,6 +52,7 @@ public class EnemyManager : MonoBehaviour
             BomberEnemy => r.color = Color.cyan,
             ShielderEnemy => r.color = Color.magenta,
             SummonerEnemy => r.color = Color.black,
+            InfestorEnemy => r.color = Color.grey,
             BaseEnemy => r.color = Color.red,
             _ => r.color = Color.clear
 
@@ -97,6 +98,7 @@ public class EnemyManager : MonoBehaviour
             BomberEnemy => r.color = Color.cyan,
             ShielderEnemy => r.color = Color.magenta,
             SummonerEnemy => r.color = Color.black,
+            InfestorEnemy => r.color = Color.grey,
             BaseEnemy => r.color = Color.red,
             _ => r.color = Color.clear
 
@@ -109,19 +111,20 @@ public class EnemyManager : MonoBehaviour
 
         gameObject.name = $"{enemy.GetType().Name}{AllEnemies.Count + 1}";
 
-        if(startingWorldPos != default)
+        if ( startingWorldPos != default )
         {
 
             gameObject.transform.position = startingWorldPos;
 
-        } else
+        }
+        else
         {
 
             gameObject.transform.position = GameManager.Instance.GridManager.EnemyPathWaypoints[ customData.StartingWaypointIndex ];
 
         }
 
-            enemy.Init( customData );
+        enemy.Init( customData );
 
         _allEnemies.Add( enemy );
 

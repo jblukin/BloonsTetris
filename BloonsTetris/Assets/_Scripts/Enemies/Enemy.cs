@@ -36,6 +36,8 @@ public abstract class Enemy : MonoBehaviour
     protected List<Vector2> _pathWaypoints;
     protected CircleCollider2D _rangeCollider;
     public abstract float PathTraversedPercetange { get; }
+    public abstract float MaxHP { get; }
+    public abstract int CurrentWaypointIndex { get; }
 
     protected abstract void Update();
 

@@ -24,8 +24,10 @@ public class EnemyManagerEditor : Editor
         inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy<BomberEnemy>(); } ) { text = "Spawn Bomber Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
 
         inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy<ShielderEnemy>(); } ) { text = "Spawn Shielder Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
-        
+
         inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy<SummonerEnemy>(); } ) { text = "Spawn Sumonner Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
+
+        inspector.Add( new Button( () => { ( target as EnemyManager ).SpawnEnemy<InfestorEnemy>(); } ) { text = "Spawn Infestor Enemy", style = { flexGrow = 1, flexShrink = 1, minHeight = 15, marginTop = 5 } } );
 
         return inspector;
 

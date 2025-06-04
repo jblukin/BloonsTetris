@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
-  m_Name: EnchanterEnemyData
+  m_Name: InfestorEnemy
   m_EditorClassIdentifier: 
-  MaxHP: 150
-  Power: 30
-  Speed: 60
-  Range: 8
-  AbilityCooldown: 2
-  AbilityDuration: 4
+  MaxHP: 100
+  Power: 8
+  Speed: 45
+  Range: 0
+  AbilityCooldown: 0
+  AbilityDuration: 0
   DeathExplosionRadius: 3
   DeathExplosionPower: 15
   StartingWaypointIndex: 0

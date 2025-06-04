@@ -4,6 +4,8 @@ using UnityEngine;
 public class BaseEnemy : Enemy
 {
     public override float PathTraversedPercetange => _pathTraversedPercentage;
+    public override float MaxHP => _maxHP;
+    public override int CurrentWaypointIndex => _currentWaypointIdx;
 
     private bool onInit = false;
 
