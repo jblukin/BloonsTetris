@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq.Expressions;
 using UnityEngine;
 
 public class BaseEnemy : Enemy
@@ -45,8 +44,7 @@ public class BaseEnemy : Enemy
         _deathExplosionPower = enemyData.DeathExplosionPower;
         _deathExplosionRadius = enemyData.DeathExplosionRadius;
         _pathWaypoints = GameManager.Instance.GridManager.EnemyPathWaypoints;
-
-        _currentWaypointIdx = 1;
+        _currentWaypointIdx = enemyData.StartingWaypointIndex + 1;
         _pathTraversedPercentage = _poisonDoTValue = _fireDoTValue = 0;
 
         _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
@@ -55,6 +53,8 @@ public class BaseEnemy : Enemy
         {
 
             _receivingObjects = new();
+
+            GameManager.Instance.EnemyManager.ReceivingObjectDestroyed.AddListener( UpdateListData );
 
             GameObject rangeDetector = new();
 
@@ -256,6 +256,9 @@ public class BaseEnemy : Enemy
     protected override void OnDeath( bool deathByFire = false )
     {
 
+        GameManager.Instance.EnemyManager.ReceivingObjectDestroyed?.Invoke( gameObject );
+        GameManager.Instance.EnemyManager.AllEnemies.Remove( this );
+
         StopAllCoroutines();
 
         if ( deathByFire )
@@ -325,7 +328,7 @@ public class BaseEnemy : Enemy
     protected override IEnumerator UseAbility()
     {
 
-        yield return null;
+        yield break;
 
         //Copy this part for enemies with abiltiies
         //while ( true )
@@ -417,6 +420,14 @@ public class BaseEnemy : Enemy
             }
 
         }
+
+    }
+
+    protected override void UpdateListData( GameObject obj )
+    {
+
+        if ( obj != gameObject )
+            _receivingObjects.Remove( obj );
 
     }
 }

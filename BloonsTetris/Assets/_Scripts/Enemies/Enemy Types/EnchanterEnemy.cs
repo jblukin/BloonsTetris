@@ -14,6 +14,14 @@ public class EnchanterEnemy : BaseEnemy
 
     }
 
+    public override void Init( EnemyData enemyData )
+    {
+        base.Init( enemyData );
+
+        GameManager.Instance.EnemyManager.ReceivingObjectDestroyed.AddListener( UpdateListData );
+
+    }
+
     protected override IEnumerator UseAbility()
     {
 
@@ -81,6 +89,9 @@ public class EnchanterEnemy : BaseEnemy
 
         yield return new WaitForSeconds( _abilityDuration );
 
+        if ( enemy == null )
+            yield break;
+
         if ( !_receivingObjects.Contains( enemy.gameObject ) )
         {
 
@@ -94,7 +105,16 @@ public class EnchanterEnemy : BaseEnemy
 
             StartCoroutine( nameof( RemoveResistences ), enemy );
 
-        }    
+        }
+
+    }
+
+    protected override void UpdateListData( GameObject obj )
+    {
+        base.UpdateListData( obj );
+
+        if ( obj != gameObject )
+            _enchantedEnemies.Remove( obj.GetComponent<Enemy>() );
 
     }
 

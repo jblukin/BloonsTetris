@@ -69,6 +69,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected abstract void Explode();
 
+    protected abstract void UpdateListData( GameObject obj );
+
 }
 
 public class PathTravelledComparer : IComparer<Enemy>
