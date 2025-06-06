@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -449,6 +450,16 @@ public class Tetrimino : MonoBehaviour
             //Perform Ability Here
             Debug.Log( "Zigzag Used" );
 
+            //VISUALS
+            //Make a gameobject that is literally just a sprite
+            //this sprite will translate to the enemy position really really fast (like bullet)
+
+            /*Continue Here*/
+
+            //ACTUAL DAMAGE
+            //Grab the enemy farthest on the path, and KILL
+            var enemy = _enemiesInRange.Max();
+            enemy.ReceiveDamageOrHealth( _power );
 
             yield return new WaitForSeconds( _cooldown );
 

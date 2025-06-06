@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI.Table;
 using Random = UnityEngine.Random;
 
 [DisallowMultipleComponent]

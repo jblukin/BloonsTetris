@@ -17,7 +17,7 @@ public class RunnerEnemy : BaseEnemy
 
         base.Update();
 
-        ReceiveDamageOrHealth( 0.01f );
+        //ReceiveDamageOrHealth( 0.01f );
 
     }
 

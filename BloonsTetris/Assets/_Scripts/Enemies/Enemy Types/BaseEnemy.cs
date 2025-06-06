@@ -6,6 +6,7 @@ public class BaseEnemy : Enemy
     public override float PathTraversedPercetange => _pathTraversedPercentage;
     public override float MaxHP => _maxHP;
     public override int CurrentWaypointIndex => _currentWaypointIdx;
+    public override float CurrentHP => _currentHP;
 
     private bool onInit = false;
 
@@ -430,6 +431,13 @@ public class BaseEnemy : Enemy
 
         if ( obj != gameObject )
             _receivingObjects.Remove( obj );
+
+    }
+
+    public override int CompareTo( object otherEnemy )
+    {
+
+        return PathTraversedPercetange.CompareTo( (otherEnemy as Enemy).PathTraversedPercetange );
 
     }
 }

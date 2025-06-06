@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 200
   Power: 15
-  Speed: 80
+  Speed: 180
   Range: 0
   AbilityCooldown: 0
   AbilityDuration: 0
   DeathExplosionRadius: 7
   DeathExplosionPower: 20
+  StartingWaypointIndex: 0
   HasAbility: 0
   ElementalTypes: 0
   ElementalResistances: 0

@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent( typeof( CircleCollider2D ) ), RequireComponent( typeof( Rigidbody2D ) ), DisallowMultipleComponent]
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IComparable
 {
 
     [Flags]
@@ -37,6 +37,7 @@ public abstract class Enemy : MonoBehaviour
     protected CircleCollider2D _rangeCollider;
     public abstract float PathTraversedPercetange { get; }
     public abstract float MaxHP { get; }
+    public abstract float CurrentHP { get; }
     public abstract int CurrentWaypointIndex { get; }
 
     protected abstract void Update();
@@ -72,6 +73,8 @@ public abstract class Enemy : MonoBehaviour
     protected abstract void Explode();
 
     protected abstract void UpdateListData( GameObject obj );
+
+    public abstract int CompareTo( object otherEnemy );
 
 }
 

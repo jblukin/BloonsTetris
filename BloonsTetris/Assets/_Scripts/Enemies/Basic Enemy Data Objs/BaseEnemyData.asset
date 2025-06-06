@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4688c54629c1a014bb7a7601f0788b1b, type: 3}
   m_Name: BaseEnemyData
   m_EditorClassIdentifier: 
-  MaxHP: 50
+  MaxHP: 80
   Power: 0
   Speed: 70
   Range: 0
@@ -20,6 +20,7 @@ MonoBehaviour:
   AbilityDuration: 0
   DeathExplosionRadius: 2
   DeathExplosionPower: 10
+  StartingWaypointIndex: 0
   HasAbility: 0
   ElementalTypes: 0
   ElementalResistances: 0
