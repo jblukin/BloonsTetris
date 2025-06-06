@@ -415,7 +415,7 @@ public class BaseEnemy : Enemy
             if ( collider.TryGetComponent<Enemy>( out var enemy ) )
             {
 
-                enemy.ApplyElementalEffects( ElementalTypes.Fire );
+                //enemy.ApplyElementalEffects( ElementalTypes.Fire );
                 enemy.ReceiveDamageOrHealth( _deathExplosionPower );
 
 
