@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d24f1537ebc31a1448107c6c6d976655, type: 3}
   m_Name: Reverse L
   m_EditorClassIdentifier: 
-  Power: 10
-  Cooldown: 10
-  Range: 10
+  Power: 40
+  Cooldown: 2
+  Range: 12
   Shape: 4
   ElementalTypes: 0
   localCellPositions:

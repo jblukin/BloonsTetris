@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -254,7 +255,13 @@ public class Tetrimino : MonoBehaviour
     {
 
         if ( collidingObject.TryGetComponent<Enemy>( out var enemy ) )
+        {
+
             _enemiesInRange.Add( enemy );
+
+            enemy.AddTetriminoToTargetingList( this );
+
+        }
 
     }
 
@@ -265,6 +272,8 @@ public class Tetrimino : MonoBehaviour
         {
 
             _enemiesInRange.Remove( enemy );
+
+            enemy.RemoveTetriminoFromTargetingList( this );
 
             switch ( _baseShape )
             {
@@ -346,6 +355,13 @@ public class Tetrimino : MonoBehaviour
         }
     }
 
+    public void RemoveDeadEnemyFromTargeting( Enemy enemy )
+    {
+
+        _enemiesInRange.Remove( enemy );
+
+    }
+
     private IEnumerator Use_L_Ability()
     {
 
@@ -394,6 +410,24 @@ public class Tetrimino : MonoBehaviour
         {
 
             yield return new WaitUntil( () => _enemiesInRange.Count > 0 );
+
+            //Spawn projectile
+
+            //Do Visual Stuff Here
+
+            //Grab Furthest Enemy Position in Range
+            //Calculate time to reach position
+            //Explode after that duration
+
+            var mortarTargetPosition = _enemiesInRange.Max().transform.position;
+
+            var _mortarSpeed = 250;
+
+            float timeTillExplosion = Vector2.Distance( mortarTargetPosition, transform.position ) / _mortarSpeed;
+
+            Debug.Log( "Start of Explosion Timer; Time till Explosion = " + timeTillExplosion );
+
+            StartCoroutine( nameof( ExplodeMortar ), new Tuple<Vector2, float>( mortarTargetPosition, timeTillExplosion ) );
 
             //Perform Ability Here
             Debug.Log( "Reverse L Used" );
@@ -509,5 +543,34 @@ public class Tetrimino : MonoBehaviour
 
     }
     #endregion
+
+    private IEnumerator ExplodeMortar( Tuple<Vector2, float> explosionData )
+    {
+
+        yield return new WaitForSeconds( explosionData.Item2 );
+
+        Debug.Log( "Exploded!" );
+
+        Collider2D[] results = Physics2D.OverlapCircleAll( explosionData.Item1, 5 /*Mortar Explosion Radius*/ * GameManager.Instance.GridManager.CellSize * 0.5f, LayerMask.GetMask( "Enemy" ) );
+
+        foreach ( var collider in results )
+        {
+
+            if ( collider.TryGetComponent<Enemy>( out var enemy ) )
+            {
+
+                float prevHealth = enemy.CurrentHP;
+
+                enemy.ApplyElementalEffects( ElementalTypes.Fire );
+                enemy.ReceiveDamageOrHealth( _power );
+
+                Debug.Log( $"{enemy.name} -- (Current Health / Previous Health): {enemy.CurrentHP} / {prevHealth}" );
+
+
+            }
+
+        }
+
+    }
 
 }

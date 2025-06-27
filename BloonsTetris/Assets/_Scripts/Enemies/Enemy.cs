@@ -33,6 +33,7 @@ public abstract class Enemy : MonoBehaviour, IComparable
     protected StatusEffects _statusEffects, _baseStatusEffects;
     protected Coroutine _poisonDoTAction, _fireDoTAction, _abilityAction;
     protected HashSet<GameObject> _receivingObjects;
+    protected HashSet<Tetrimino> _currentTargetingTetriminos;
     protected List<Vector2> _pathWaypoints;
     protected CircleCollider2D _rangeCollider;
     public abstract float PathTraversedPercetange { get; }
@@ -73,6 +74,10 @@ public abstract class Enemy : MonoBehaviour, IComparable
     protected abstract void Explode();
 
     protected abstract void UpdateListData( GameObject obj );
+
+    public abstract void AddTetriminoToTargetingList( Tetrimino tetrimino );
+
+    public abstract void RemoveTetriminoFromTargetingList( Tetrimino tetrimino );
 
     public abstract int CompareTo( object otherEnemy );
 

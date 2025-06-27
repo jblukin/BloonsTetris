@@ -50,6 +50,8 @@ public class BaseEnemy : Enemy
         _currentWaypointIdx = enemyData.StartingWaypointIndex + 1;
         _pathTraversedPercentage = _poisonDoTValue = _fireDoTValue = 0;
 
+        _currentTargetingTetriminos = new();
+
         _distanceBetweenPrevCurrWaypoint = Vector2.Distance( _pathWaypoints[ _currentWaypointIdx - 1 ], _pathWaypoints[ _currentWaypointIdx ] );
 
         if ( enemyData.HasAbility )
@@ -262,6 +264,13 @@ public class BaseEnemy : Enemy
         GameManager.Instance.EnemyManager.ReceivingObjectDestroyed?.Invoke( gameObject );
         GameManager.Instance.EnemyManager.AllEnemies.Remove( this );
 
+        foreach ( Tetrimino t in _currentTargetingTetriminos )
+        {
+
+            t.RemoveDeadEnemyFromTargeting( this );
+
+        }
+
         StopAllCoroutines();
 
         if ( deathByFire )
@@ -434,10 +443,24 @@ public class BaseEnemy : Enemy
 
     }
 
+    public override void AddTetriminoToTargetingList( Tetrimino tetrimino )
+    {
+        
+        _currentTargetingTetriminos.Add( tetrimino );
+
+    }
+
+    public override void RemoveTetriminoFromTargetingList( Tetrimino tetrimino )
+    {
+        
+        _currentTargetingTetriminos.Remove( tetrimino );
+
+    }
+
     public override int CompareTo( object otherEnemy )
     {
 
-        return PathTraversedPercetange.CompareTo( (otherEnemy as Enemy).PathTraversedPercetange );
+        return PathTraversedPercetange.CompareTo( ( otherEnemy as Enemy ).PathTraversedPercetange );
 
     }
 }
